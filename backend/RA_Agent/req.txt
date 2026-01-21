@@ -1,0 +1,39 @@
+pip install \
+langchain \
+langgraph \
+langchain-groq \
+langchain-huggingface \
+langchain-community \
+sentence-transformers \
+fastapi \
+uvicorn \
+python-dotenv \
+pymongo \
+pypdf \
+python-docx \
+tiktoken
+pip install unstructured pdfminer.six
+pip install pi-heif
+
+
+for agent things
+LLM + Agent
+pip install langchain langgraph langchain-groq
+for the server and the api things
+Fastapi:
+pip install fastapi uvicorn
+// very important package thing
+langchain-huggingface for the langChain wrapper
+sentence-tranformer for tthe embedding models things
+
+mongodb thing for the python:
+pip install pymongo
+ resume file loading thing for the pdf and docx thing
+ pip install pypdf python-docx
+ for loading the document we need the langchain-community
+ pip install pyPDFLoader
+ DocxLoader
+ some like csv
+ text chunking is good for the face chunk thing sizing things
+ for streaming the data thing like async thing
+ pip install sse-starlette
