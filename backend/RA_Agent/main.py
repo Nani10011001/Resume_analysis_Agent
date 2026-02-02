@@ -4,7 +4,16 @@ from langgraph.graph import StateGraph,END,START
 from pymongo import MongoClient
 from langchain_community.document_loaders import UnstructuredPDFLoader,PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from typing import TypedDict,Annotated,Sequence
+from langchain_core.messages import AIMessage,BaseMessage,HumanMessage,SystemMessage
+from fastapi import FastAPI
+from langgraph.graph import add_messages
+
 import os
+class Agent_state(TypedDict):
+    userId:str
+    messages:Annotated[Sequence[BaseMessage],add_messages]
+
 embedding=HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
@@ -28,18 +37,18 @@ for d in docs:
     page_text=d.page_content
     all_pages.append(page_text)
 text="\n".join(all_pages)
-if(text.strip()<100):
+if(len(text.strip())<100):
     raise ValueError("unable to extract the pdf data upload text-based pdf")
 print(text[:200])
 print("length",len(text))
 
 
 text_splitter=RecursiveCharacterTextSplitter(
-    chunk_size=100,
-    chunk_overlap=30
+    chunk_size=900,
+    chunk_overlap=200
 )
 chunks=text_splitter.split_text(text)
 
 print(chunks)
-MONG_URL=os.getenv("MONG_URL")
-mongooseDB=MongoClient(MONG_URL)
+
+    

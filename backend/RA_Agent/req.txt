@@ -37,3 +37,10 @@ pip install pymongo
  text chunking is good for the face chunk thing sizing things
  for streaming the data thing like async thing
  pip install sse-starlette
+
+ for nlp text extracter thing spacy
+ pip install spacy
+ dowloading the english spacy 
+ python -m spacy dowload en_core_web_md (medium is good)
+ for verifcation 
+ python -m spacy validate
