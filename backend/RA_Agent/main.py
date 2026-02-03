@@ -1,18 +1,28 @@
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
 from langgraph.graph import StateGraph,END,START
-from pymongo import MongoClient
+
 from langchain_community.document_loaders import UnstructuredPDFLoader,PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from typing import TypedDict,Annotated,Sequence
+from typing import TypedDict,Annotated,Sequence,Dict,Any,List
 from langchain_core.messages import AIMessage,BaseMessage,HumanMessage,SystemMessage
 from fastapi import FastAPI
 from langgraph.graph import add_messages
-
+from pydantic import BaseModel
 import os
 class Agent_state(TypedDict):
     userId:str
     messages:Annotated[Sequence[BaseMessage],add_messages]
+#resumeAgent shema
+class resumeState(TypedDict):
+    raw_text:str
+    exracted:Dict[str,Any]
+    experience:List[Dict[str,Any]]
+
+#chat request schema
+class ChatRequest(BaseModel):
+    userId:str
+    content:str
 
 embedding=HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
