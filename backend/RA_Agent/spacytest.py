@@ -9,8 +9,8 @@ doc = spacymodel(text)
 for ent in doc.ents:
     print(ent.text, ent.label_)
  """
-from NLP.spacy_ext import extract_resume_entities
-from NLP.spacy_ex import build_experience_blocks
+""" from NLP.spacy_ext import extract_resume_entities
+from NLP.spacy_ex import extract_experience """
 text="""Jai Suriya
 Software Engineer
 
@@ -41,7 +41,9 @@ Bachelor of Technology in Computer Science
 Anna University
 2016 - 2020
 """
-entities=extract_resume_entities(text=text)
-blocks=build_experience_blocks(text,entities)
-print("info extraction: ",entities)
-print("experience Block",blocks)
+""" entities = extract_resume_entities(text=text)
+blocks = extract_experience(text=text)
+
+print("info extraction:", entities)
+print("experience Block:", blocks)
+ """
