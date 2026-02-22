@@ -44,3 +44,5 @@ pip install pymongo
  python -m spacy dowload en_core_web_md (medium is good)
  for verifcation 
  python -m spacy validate
+ pip install python-multipart
+required for the form json data uploading data send of it

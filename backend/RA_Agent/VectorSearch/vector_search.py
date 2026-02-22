@@ -1,9 +1,9 @@
 from bson import ObjectId
 from RA_Agent.Db.pyDb import embedding_db
 
-def vector_search_resume(userid:str,
+def vector_search_resume(userid:ObjectId,
                          query_embedding:list[float],
-                         version:int=1,
+                        resume_id:ObjectId,
                          top_k:int=5):
     pipeline = [
         {
@@ -15,7 +15,7 @@ def vector_search_resume(userid:str,
                 "limit": top_k,
                 "filter": {
                     "user_id": ObjectId(userid),
-                    "version": version
+                     "resume_id":resume_id
                 }
             }
         },

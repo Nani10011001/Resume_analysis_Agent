@@ -7,10 +7,10 @@ from RA_Agent.DbModel.resumeEmbSchema import ResumeEmbedding
 
 def store_embedding(
     user_id: ObjectId,
-    
+    resume_id:ObjectId,
     text:List[str],
     embeddings: List[List[float]],
-    version: int = 1
+  
 ):
     records = []
 
@@ -19,10 +19,12 @@ def store_embedding(
         embedding_doc = ResumeEmbedding(
             user_id=user_id,
             chunk_id=i,
-            text=chunk,
+            resume_id=resume_id,
+            text=chunk.page_content,
+            metadata=chunk.metadata,
             embedding=embeddings[i],
             source="pdf",
-            version=version,
+        
             created_at=datetime.now(timezone.utc)
         )
 

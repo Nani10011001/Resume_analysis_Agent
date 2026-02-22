@@ -21,7 +21,10 @@ from bson import ObjectId
 from RA_Agent.SystemPromt.signalPrompt import signalAgentPrompt
 from RA_Agent.SystemPromt.E_prompt import explain_Agent_prompt
 from RA_Agent.NLP.ScoringPython import scoring_engine
+from RA_Agent.DbModel.NLP_schema import NLP_schema_str
 import uuid
+from RA_Agent.DbSearch.nlp_search import get_nlp_info
+from RA_Agent.DbModel.storeNlp import Nlp_info_store
 class Agent_state(TypedDict):
     userId:str
     messages:Annotated[Sequence[BaseMessage],add_messages]
@@ -33,66 +36,19 @@ class Agent_state(TypedDict):
     score:float
     score_breakdown:Dict[str,Any]
     jd_requirements:Dict[str,Any]
+    resume_id:str
 
     
 #chat request schema
 class ChatRequest(BaseModel):
     userId:str
     content:str
+    resume_id:str
 
 embedding=HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
-
-
-
-
-""" from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent
-file = BASE_DIR / "Resume.pdf"
-
-if not os.path.exists(file):
-    raise FileNotFoundError("file is not found")
-loader=PyPDFLoader(file)
-try:
-    docs=loader.load()
-except Exception as e:
-    raise RecursionError("error in pdf load")    
-
-
-all_pages=[]
-for d in docs:
-    page_text=d.page_content
-    all_pages.append(page_text) 
-
-text = "\n".join(d.page_content for d in docs) """
-
-
-""" 
-if(len(text.strip())<100):
-    raise ValueError("unable to extract the pdf data upload text-based pdf")
-allExtractionInfo=[]
-
-
-text_splitter=RecursiveCharacterTextSplitter(
-    chunk_size=900,
-    chunk_overlap=200
-)
-chunks=text_splitter.split_text(text)
-embeddingTextPdf=embedding.embed_documents(chunks)
-print("chunks info: ",len(chunks))
-print(len(embeddingTextPdf))
-print(len(embeddingTextPdf[0]))  """
-#storing embeddings deployed
-""" embInfo=store_embedding(user_id=ObjectId("69898924a85793c43ba3a4c3"),
-                        text=chunks,
-                        embeddings=embeddingTextPdf,
-                        version=1)
-#nlp extraction info things """
-""" userEntities=extract_resume_entities(text=text) """
-""" experienceBlock=extract_experience(text=text) """
-
+llm=ChatGroq(model="mixtral-8x7b-32768",api_key=os.environ['GROQ_API_KEY'],streaming=True)
 app=FastAPI()
 @app.post("/upload-resume")
 async def upload_resume(userId:str=Form(),file:UploadFile=File()):
@@ -110,15 +66,31 @@ async def upload_resume(userId:str=Form(),file:UploadFile=File()):
         loader=PyPDFLoader(temp_path)
         docs=loader.load()
         print(len(docs))
-        
+        resume_id=ObjectId()
+        user_object_id=ObjectId(userId)
         text_splitter=RecursiveCharacterTextSplitter(
             chunk_size=800,
             chunk_overlap=200
         )
-        chunks=text_splitter.split_text(docs)
-        chunk_texts=[d.page_content for d in chunks]
-        pdf_text_embedding=embedding.embed_documents(chunk_texts)
-        emb_info=store_embedding(user_id=userId,text=chunk_texts,embeddings=pdf_text_embedding)
+        full_text="\n".join(d.page_content for d in docs)
+        chunks=text_splitter.split_documents(docs)
+        chunks_texts=[d.page_content for d in chunks]
+        print("chunk_data: ",chunks_texts)
+        pdf_text_embedding=embedding.embed_documents(chunks_texts)
+        extract_resume_info=extract_resume_entities(text=full_text)
+        extract_resume_experience=extract_experience(text=full_text)
+        #NLP store 
+        Nlp_info_store(userId=user_object_id,
+                       resumeId=resume_id,
+                       raw_text=full_text,
+                       nlp_extraction_info=extract_resume_info,
+                       nlp__experience_info=extract_resume_experience)
+        
+        store_embedding(user_id=user_object_id,
+                                 resume_id=resume_id,
+                                 text=chunks,
+                                 embeddings=pdf_text_embedding)
+
         
     except Exception as e:
         print(f"error at file load : {e}")
@@ -131,8 +103,13 @@ async def upload_resume(userId:str=Form(),file:UploadFile=File()):
 #node of  retrive info node
 def retrieve_node(state:Agent_state):
     user_query=state["messages"][-1].content
+    userId=ObjectId(state["userId"])
+    resume_id=ObjectId(state["resume_id"])
     query_embeddings=embedding.embed_query(user_query)
-    results=vector_search_resume(userid=state["userId"],query_embedding=query_embeddings)
+    results=vector_search_resume(userid=ObjectId(state["userId"]),resume_id=ObjectId(state['resume_id']),query_embedding=query_embeddings)
+    nlp_data=get_nlp_info(userId=userId,resume_id=resume_id)
+    ext_entities = nlp_data.get("nlp_extraction_info", {})
+    exp_entities = nlp_data.get("nlp_experience_info", {})
     chunksInfo=[r["text"] for r in results]
 
     return {
@@ -171,7 +148,7 @@ def scoring_node(state:Agent_state):
     }
 
 
-llm=ChatGroq(model="mixtral-8x7b-32768",api_key=os.environ['GROQ_API_KEY'])
+
 
 
 def explanation_node(state:Agent_state):
@@ -204,3 +181,13 @@ graph.add_edge("scoring_node","explanation_node")
 graph.add_edge("explanation_node",END)
 Agent_app=graph.compile()
 
+app.post("/chat")
+async def chat_interface_send(req:ChatRequest):
+    userId=req.userId
+    resume_id=req.resume_id
+    query=req.content
+
+    Agent_app.invoke({
+        "userId":userId,
+        "j"
+    })
