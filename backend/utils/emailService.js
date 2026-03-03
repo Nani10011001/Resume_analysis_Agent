@@ -6,6 +6,7 @@ const ClientMailConfig=nodemailer.createTransport(
     {
         service:"gmail",
         auth:{
+
             user:env.EMAIL_USER,
             pass:env.PASS_KEY
         }

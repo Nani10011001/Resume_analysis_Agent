@@ -39,20 +39,21 @@ const userAleardyExit=await User.findOne({email})
 
         })
         
-        const jwtToken= jwt.sign({userId:user._id},env.JWT_SECRETE,{expiresIn:"7d"})
-        
+    const jwtToken= jwt.sign({userId:user._id},env.JWT_SECRETE,{expiresIn:"7d"})
+            
         res.cookie("token",jwtToken,{
             httpOnly:true,
             secure:process.env.NODE_ENV==="production",
             sameSite:"strict",
             maxAge:7*24*60*60*1000
        
-        }) 
+        })
+    
 return res.status(200).json({
     success:true,
     message:"signup successfully",
     userDetail:user,
-    jsonToken:jwtToken
+    
 })
         
     } catch (error) {
@@ -81,9 +82,11 @@ export const OtpverifyPage=async(req,res)=>{
             message:"invalid OTP or OTP is Expired"
         })
     }
-    user.emailOtp=null
+  
+           user.emailOtp=null
     user.otpExpiry=null
     await user.save()
+
     return res.status(200).json({
         success:true,
         message:"OTP is Successfully verified"
@@ -99,6 +102,7 @@ export const OtpverifyPage=async(req,res)=>{
 export const Login=async(req,res)=>{
     try {
         const {email,password}=req.body
+
         if(!email|| !password){
             return res.status(400).json({
                 success:false,
@@ -132,4 +136,20 @@ export const Login=async(req,res)=>{
         })
         
     }
+}
+export const logout=()=>{
+ try {
+    res.clearCookie("token")
+    return res.status(202).json({
+        success:true,
+        message:"logout successfull"
+    })
+ } catch (error) {
+
+       console.log(error)
+        return res.status(500).json({
+            success:false,
+            message:error.message
+        })
+ }
 }

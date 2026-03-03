@@ -4,10 +4,12 @@ import cors from "cors"
 import { env } from "./config/ZodValidation.js"
 import DatabaseConnect from "./DB/dbconntect.js"
 import router from "./router/authrouter.js"
+import cookieParser from "cookie-parser"
 const app=express()
 
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
 app.use("/api",router)
 const serverStart=async()=>{
 

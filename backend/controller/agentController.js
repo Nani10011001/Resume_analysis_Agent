@@ -1,8 +1,9 @@
+import { FileController } from "./Atuthication/FileController"
 
 
 export const agentController=async(req,res)=>{
   const {userId,content}=req.body
-  const file=req.body.file
+
     try {
         if(!userId || !content){
            return res.status(400).json({
@@ -18,5 +19,18 @@ export const agentController=async(req,res)=>{
             success:false,
             message:"Internal server error"
         })
+    }
+}
+export const agentFileController=async(req,res)=>{
+    const {userId}=req.body
+    const file=req.file
+
+    try {
+      
+const fileUpload= await FileController(userId,file)
+console.log(fileUpload)
+        
+    } catch (error) {
+        
     }
 }

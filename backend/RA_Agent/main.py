@@ -35,7 +35,7 @@ class Agent_state(TypedDict):
     spacy_experience:List[Dict[str,Any]]
     score:float
     score_breakdown:Dict[str,Any]
-    jd_requirements:Dict[str,Any]
+    full_text:str
     resume_id:str
 
     
@@ -80,6 +80,7 @@ async def upload_resume(userId:str=Form(),file:UploadFile=File()):
         extract_resume_info=extract_resume_entities(text=full_text)
         extract_resume_experience=extract_experience(text=full_text)
         #NLP store 
+        
         Nlp_info_store(userId=user_object_id,
                        resumeId=resume_id,
                        raw_text=full_text,
@@ -91,7 +92,9 @@ async def upload_resume(userId:str=Form(),file:UploadFile=File()):
                                  text=chunks,
                                  embeddings=pdf_text_embedding)
 
-        
+        return {
+            "resume_id":resume_id
+        }
     except Exception as e:
         print(f"error at file load : {e}")
     finally:
@@ -110,12 +113,14 @@ def retrieve_node(state:Agent_state):
     nlp_data=get_nlp_info(userId=userId,resume_id=resume_id)
     ext_entities = nlp_data.get("nlp_extraction_info", {})
     exp_entities = nlp_data.get("nlp_experience_info", {})
+    raw_text=nlp_data.get("raw_text",{})
     chunksInfo=[r["text"] for r in results]
 
     return {
         "retrieved_text":"\n".join(chunksInfo),
         "spacy_entities":ext_entities,
-        "spacy_experience":exp_entities
+        "spacy_experience":exp_entities,
+        "full_text":raw_text
 
         
 
@@ -125,7 +130,7 @@ def retrieve_node(state:Agent_state):
 def signal_node(state:Agent_state):
     payload={
         "retrieved_text":state["retrieved_text"],
-       "jd_requirements":state["jd_requirements"]
+     
        
     }
     response=llm.invoke([
@@ -141,7 +146,7 @@ def signal_node(state:Agent_state):
 #scoring node
 def scoring_node(state:Agent_state):
     scoringData=scoring_engine(spacy_entities=state["spacy_entities"],spacy_experience=state["spacy_experience"],
-                   signals=state["signals"],jd_requirements=state["jd_requirements"])
+                   signals=state["signals"],full_text=state['full_text'])
     return {
         "score":scoringData["total_score"],
         "score_breakdown":scoringData["breakdown"]
@@ -189,5 +194,5 @@ async def chat_interface_send(req:ChatRequest):
 
     Agent_app.invoke({
         "userId":userId,
-        "j"
+        
     })

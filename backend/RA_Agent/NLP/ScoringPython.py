@@ -1,65 +1,115 @@
-def scoring_engine(spacy_entities, spacy_experience, signals, jd_requirements):
+def scoring_engine(spacy_entities, spacy_experience, signals, full_text):
 
     score = 0
     breakdown = {}
 
-    
-    resume_skills = set(spacy_entities.get("skills", []))
-    jd_skills = set(jd_requirements.get("skills", []))
+    # -----------------------------------
+    # 1️⃣ Achievement Impact (Max 25)
+    # -----------------------------------
+    quantified_keywords = ["%", "percent", "increase", "reduced", "improved", "growth", "$", "revenue"]
+    impact_hits = sum(1 for word in quantified_keywords if word.lower() in full_text.lower())
 
-    if jd_skills:
-        matched_skills = resume_skills & jd_skills
-        missing_skills = jd_skills - resume_skills
-
-        skill_ratio = len(matched_skills) / len(jd_skills)
-        skill_score = skill_ratio * 60
+    if impact_hits >= 4:
+        impact_score = 25
+    elif impact_hits >= 2:
+        impact_score = 18
+    elif impact_hits >= 1:
+        impact_score = 10
     else:
-        matched_skills = set()
-        missing_skills = set()
-        skill_score = 0
+        impact_score = 5
 
-    score += skill_score
-
-    breakdown["skills"] = {
-        "matched": list(matched_skills),
-        "missing": list(missing_skills),
-        "score": round(skill_score, 2)
-    }
+    score += impact_score
+    breakdown["achievement_impact"] = impact_score
 
 
-    resume_exp = spacy_entities.get("year_experience", 0)
-    required_exp = jd_requirements.get("min_experience", 0)
+    # -----------------------------------
+    # 2️⃣ Skill Depth & Proof (Max 20)
+    # -----------------------------------
+    skills = spacy_entities.get("skills", [])
+    projects = spacy_experience or []
 
-    if required_exp > 0:
-        if resume_exp >= required_exp:
-            exp_score = 25
-        else:
-            exp_score = (resume_exp / required_exp) * 25
+    proof_score = min(len(projects) * 4, 20)
+
+    score += proof_score
+    breakdown["skill_depth"] = proof_score
+
+
+    # -----------------------------------
+    # 3️⃣ Experience Progression (Max 15)
+    # -----------------------------------
+    years = spacy_entities.get("year_experience", 0)
+
+    if years >= 8:
+        exp_score = 15
+    elif years >= 5:
+        exp_score = 12
+    elif years >= 3:
+        exp_score = 8
+    elif years >= 1:
+        exp_score = 5
     else:
-        exp_score = 0
+        exp_score = 2
 
     score += exp_score
-
-    breakdown["experience"] = {
-        "resume_experience": resume_exp,
-        "required_experience": required_exp,
-        "score": round(exp_score, 2)
-    }
+    breakdown["experience_progression"] = exp_score
 
 
+    # -----------------------------------
+    # 4️⃣ Project Complexity (Max 15)
+    # -----------------------------------
+    tech_stack_size = len(set(skills))
 
-    penalty = 0
+    if tech_stack_size >= 12:
+        project_score = 15
+    elif tech_stack_size >= 8:
+        project_score = 12
+    elif tech_stack_size >= 5:
+        project_score = 8
+    else:
+        project_score = 4
+
+    score += project_score
+    breakdown["project_complexity"] = project_score
+
+
+    # -----------------------------------
+    # 5️⃣ Clarity & Communication (Max 10)
+    # -----------------------------------
+    vague_words = ["responsible for", "worked on", "involved in", "participated"]
+    vagueness_hits = sum(1 for v in vague_words if v in full_text.lower())
+
+    clarity_score = 10 - min(vagueness_hits * 2, 8)
+    clarity_score = max(2, clarity_score)
+
+    score += clarity_score
+    breakdown["clarity"] = clarity_score
+
+
+    # -----------------------------------
+    # 6️⃣ Structure & ATS Safety (Max 10)
+    # -----------------------------------
+    structure_score = 10
 
     if signals.get("parsing_risks", {}).get("tables", {}).get("value"):
-        penalty += 7
+        structure_score -= 4
+
+    score += structure_score
+    breakdown["structure"] = max(structure_score, 0)
+
+
+    # -----------------------------------
+    # 7️⃣ Penalties (Max -15)
+    # -----------------------------------
+    penalty = 0
 
     if signals.get("keywords", {}).get("keywords_stuffing", {}).get("value"):
         penalty += 8
 
+    if signals.get("parsing_risks", {}).get("images", {}).get("value"):
+        penalty += 5
+
     score -= penalty
-
-    breakdown["ats_penalty"] = penalty
-
+    breakdown["penalties"] = penalty
 
 
     final_score = max(0, min(100, score))

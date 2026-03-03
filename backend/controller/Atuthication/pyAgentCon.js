@@ -1,9 +1,13 @@
 import axios from "axios"
 import { env } from "../../config/ZodValidation.js"
+import { success } from "zod"
 
 export const pyAgentcon=async(userId,content)=>{
   if(!userId || !content){
-    throw new Error("Error occured passing parameter")
+    return res.json({
+      success:false,
+      message:"is not authroized "
+    })
   }
 
     try {

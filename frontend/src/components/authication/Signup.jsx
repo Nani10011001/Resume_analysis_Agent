@@ -3,25 +3,38 @@ import { useState } from 'react'
 import axios from "axios"
 import toast from 'react-hot-toast'
 import { Sparkles } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { useAppcontext } from '../../contextapp/Context_app'
+import { Loader } from 'lucide-react'
 const Signup = () => {
   const [username,setUsername]=useState("")
   const [email,setEmail]=useState("")
   const [password,setPassword]=useState("")
+  const [isLoding,setIsLoading]=useState(false)
 
-  const inputHandler=async()=>{
+const {navigate}=useAppcontext()
+  const inputHandler=async(e)=>{
+    e.preventDefault()
+    setIsLoading(true)
     const creditenial={
       username,
       email,
       password
     }
     try {
-      const {data}=axios.post("http://localhost:7000/api/signup",creditenial)
+      const {data}= await axios.post("http://localhost:7000/api/signup",creditenial)
+      console.log(data)
       if(data.success){
  toast.success(data.message)
+ navigate("/login")
       }
+
     } catch (error) {
       console.log(error)
-      toast.error(error.message)
+      toast.error(error.response?.data?.message|| "signup failed")
+    }
+    finally{
+      setIsLoading(false)
     }
   }
   return (
@@ -72,14 +85,43 @@ const Signup = () => {
 
       </div>
 
-    <div className='max-w-1/2 min-h-screen p-10 flex justify-center  gap-20'>
-       <div className='shadow-sm shadow-black max-w-full p-10'>
-  <p className='font-bold'>Create account</p>
+    <div className='w-1/2 flex justify-center  p-10   gap-20'>
+       <div className='shadow-sm shadow-black/30 w-full p-10'>
+  <p className='font-bold text-center text-2xl'>Create account</p>
   <p></p>
-<form action="">
-  <div><label htmlFor="">Email address</label><input type="text" placeholder='Enter your email' /></div>
+<form action="" onSubmit={inputHandler} className=''>
+  <div className='flex flex-col gap-2 '><label className='text-sm font-bold' htmlFor="">username</label>
+  <input 
+  value={username}
+  onChange={(e)=>setUsername(e.target.value)}
+  type="text" 
+  className='w-full py-2 outline-none border-2 placeholder:p-3 indent-2 border-gray-300 rounded-md mb-3' placeholder='Enter your name' /></div>
+  <div  className='flex flex-col gap-2 '>
+    <label className='text-sm font-bold' htmlFor="">Email address</label>
+    <input 
+    value={email}
+    onChange={(e)=>setEmail(e.target.value)}
+    type="text"  placeholder='Enter your email'
+      className='w-full py-2 outline-none border-2 placeholder:p-3 indent-2 border-gray-300 rounded-md mb-3' />
+    </div>
+<div className='flex flex-col gap-2 '>
+  <label className='text-sm font-bold' htmlFor="">password</label>
+  <input type="password" 
+  value={password}
+  onChange={(e)=>setPassword(e.target.value)}
+    className='w-full py-2 outline-none border-2 placeholder:p-3 indent-2 border-gray-300 rounded-md mb-3' placeholder='Enter your password' />
+</div>
+<div><button disabled={isLoding} type='submit' className={`w-full text-white  py-2 rounded-md ${isLoding?"cursor-not-allowed bg-blue-600":"bg-blue-600"} `} >{
+isLoding?(<span className='flex   justify-center items-center gap-2'>
+  <Loader className='animate-spin w-4 h-4'/>Registering...
+</span>):"Register"
+  }</button></div>
 </form>
+<div className='text-center mt-4'>
+ <p>If you have an account go to <Link to="/login" className='underline text-blue-600'>Login</Link></p>
+</div>
  </div>
+ 
     </div>
     </div>
   )
