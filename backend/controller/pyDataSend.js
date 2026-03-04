@@ -1,13 +1,18 @@
-import axios from "axios"
 
-export async function* ({userId,content}){
+import https from "https"
+
+import { env } from "../config/ZodValidation.js";
+// Allow self-signed certs when connecting to localhost (dev only)
+const agent = new https.Agent({ rejectUnauthorized: false });
+
+export async function* pyDataSend({userId,content}){
 
     if(!userId){
      throw new Error("invalid userId please resgister")
 
     }
     try {
-        const res=fetch("http://localhost:7001/chat",{
+        const res=await fetch(env.FASTAPI_URL,{
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify(
@@ -22,7 +27,7 @@ export async function* ({userId,content}){
 
         }
         if(!res.ok){
-            throw new Error(`fastapi returned ${ res.status}:,${(await res).text()}`)
+            throw new Error(`fastapi returned ${ res.status}:`)
         }
  const reader=res.body.getReader()
  const decoader=new TextDecoder()
@@ -36,7 +41,11 @@ export async function* ({userId,content}){
     console.log("decode python data response",decoded)
  }
     } catch (error) {
-        console.error(error)
-        throw new Error("error at fastApi config sever of it")
+        console.error("FastAPI connection error - Full details:", {
+            message: error.message,
+            stack: error.stack,
+            code: error.code
+        })
+        throw new Error(`FastAPI unavailable: ${error.message}`)
     }
 }

@@ -29,6 +29,7 @@ const {navigate}=useAppcontext()
  navigate("/login")
       }
 
+
     } catch (error) {
       console.log(error)
       toast.error(error.response?.data?.message|| "signup failed")

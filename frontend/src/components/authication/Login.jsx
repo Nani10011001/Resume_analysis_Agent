@@ -25,7 +25,8 @@ const Login = () => {
    toast.success(data.message)
    navigate("/upload-resume")
         }
-  
+      
+localStorage.setItem("token", data.userIdentity)
       } catch (error) {
         console.log(error)
         toast.error(error.response?.data?.message||"login failed")

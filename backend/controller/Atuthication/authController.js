@@ -25,9 +25,10 @@ const userAleardyExit=await User.findOne({email})
             })
         } 
         const hashPassword=await bcrypt.hash(password,10)
+         const otp=otpGenerator()
 
-        const otp=otpGenerator()
-        await otpSentEmail(email,otp)
+    /*    
+       // await otpSentEmail(email,otp) */
         
         const user=await User.create({
             username:username,
@@ -53,6 +54,7 @@ return res.status(200).json({
     success:true,
     message:"signup successfully",
     userDetail:user,
+   
     
 })
         
@@ -110,6 +112,7 @@ export const Login=async(req,res)=>{
             })
         }
         const user=await User.findOne({email})
+        const userId=user._id
         if(!user){
             return res.status(400).json({
                 success:false,
@@ -125,7 +128,9 @@ export const Login=async(req,res)=>{
         }
         return res.status(200).json({
             success:true,
-            message:"login successfully"
+            message:"login successfully",
+            userIdentity:userId
+
 
         })
     } catch (error) {

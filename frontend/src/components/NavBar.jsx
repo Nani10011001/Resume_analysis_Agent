@@ -1,9 +1,13 @@
 import React from 'react'
 import { FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAppcontext } from '../contextapp/Context_app';
 
 
 const NavBar = () => {
+  const {userId}=useAppcontext()
+ 
+ 
   return (
     <div>
       <div className='flex justify-between items-center '>
@@ -16,7 +20,11 @@ const NavBar = () => {
          
    <Link to="/upload-resume" className='cursor-pointer hover:bg-blue-600 hover:rounded-md hover:transition-all  hover:px-3 py-1 hover:text-white'>Upload</Link>
           
-          <Link to="/signup" className=' cursor-pointer hover:bg-blue-600 hover:rounded-md hover:transition-all  hover:px-3 py-1 hover:text-white'>GetStarted</Link>
+          {
+            userId? <button  className='cursor-pointer hover:bg-blue-600 hover:rounded-md hover:transition-all  hover:px-3 py-1 hover:text-white'>Logout</button>:<Link to="/signup" className='cursor-pointer hover:bg-blue-600 hover:rounded-md hover:transition-all  hover:px-3 py-1 hover:text-white'>Getstarted</Link>
+          
+          
+          }
          </div></div>
     </div>
   )

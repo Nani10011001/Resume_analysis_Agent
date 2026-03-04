@@ -3,11 +3,13 @@ import NavBar from '../components/NavBar'
 import { Send } from 'lucide-react'
 import { Sparkles } from 'lucide-react'
 import { useState } from 'react'
+import { useAppcontext } from '../contextapp/Context_app'
 
 const RA_Agent = (e) => {
   const [inputMessage,setInputMessage]=useState('')
   const [message,setMessage]=useState([])
   const [streamResponse,setStreamResponse]=useState('')
+const {userId}=useAppcontext()
   const inputHandler=async()=>{
 if(!inputMessage) return 
   const user={
@@ -18,15 +20,15 @@ if(!inputMessage) return
  setMessage((prev)=>[
   ...prev,user
 ]) 
-const res=await fetch("http://localhost:7000/api/send",{
+const res=await fetch("http://localhost:7000/api/agent/send",{
   method:"POST",
   headers:{
     "Content-Type":"application/json"
   },
   body:JSON.stringify(
    {
-     userId:"",
-    content:""
+     userId:userId,
+    content:user.text
    }
   )
 
@@ -41,7 +43,7 @@ const decodeer=new TextDecoder()
 // once respnse finished loop break done
 let fullChunk=""
 while(true){
-  const {value,done}=reader.read()
+  const {value,done}=await reader.read()
 if(done) break
 const chunk=decodeer.decode(value,{stream:true})// why we do this means we get Uint8Array(5) [72, 101, 108, 108] 72 → "H"
 fullChunk+=chunk

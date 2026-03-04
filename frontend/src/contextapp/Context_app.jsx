@@ -9,9 +9,11 @@ import { createContext } from 'react'
  import { useNavigate } from 'react-router-dom'
 export  const Context_app = ({children}) => {
     const navigate=useNavigate()
+      const userId=localStorage.getItem("token")
    const value={
 axios,
-navigate
+navigate,
+userId
    }
   return (
     <AppContext.Provider value={value}>

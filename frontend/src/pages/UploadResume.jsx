@@ -1,19 +1,39 @@
 import React, { useEffect, useState } from 'react'
 import NavBar from '../components/NavBar'
-import { Upload } from 'lucide-react'
+import { Loader, Upload } from 'lucide-react'
+import { useAppcontext } from '../contextapp/Context_app'
+import toast from "react-hot-toast"
 const UploadResume = () => {
-  const [pdfUrl,setPdf]=useState(null)
-  const handelFileInput=(e)=>{
+  const [pdf,setPdf]=useState(null)
+  const [loading,setLoading]=useState(null)
+  const {axios,navigate,userId}=useAppcontext()
+  const handelFileInput=async(e)=>{
     const file=e.target.files[0]
-    if(file&&file.type==="application/pdf"){
-      const url=URL.createObjectURL(file)
-      setPdf(url)
+    if(file&&file.type=="application/pdf"){
+      setPdf(file)
+      
+    
+      
+      try {
+        const {data} = await axios.post("/agent/upload/resume", {
+          userId,file
+        })
+        console.log(data)
+        if(data?.success){
+          toast.success("File uploaded successfully")
+          navigate("/chat-ui")
+        }
+      } catch (error) {
+        console.error("Upload error:", error)
+        toast.error(error.response?.data?.message || "Upload failed")
+      }
+    }
+    else{
+      toast.error("Only PDF files allowed")
     }
    
   }
-  useEffect(()=>{
-console.log(pdfUrl)
-  },[pdfUrl])
+
   return (
     <div className='w-full h-full'>
      <NavBar/>
@@ -27,8 +47,30 @@ console.log(pdfUrl)
             id='upload-data' className='hidden ' />
             <label htmlFor="upload-data" className='flex flex-col justify-center items-center'><Upload/></label>
             <p className='my-2 font-semibold text-sm'>Drop your resume here</p>
-            
+           
+           {pdf && (
+  <div className="mt-4 flex items-center justify-between border rounded-lg p-3 w-[300px] bg-gray-50">
+
+    <div className="flex items-center gap-2">
+      📄
+      <p className="text-sm font-medium">{pdf.name}</p>
+    </div>
+
+    <button
+      onClick={()=>setPdf(null)}
+      className="text-red-500 text-sm"
+    >
+      ✕
+    </button>
+
+  </div>
+)}
+<div className='mt-3'><button  onClick={handle} className=' bg-blue-600 rounded-md py-2 w-full text-white'> 
+  {
+    <Loader/>
+  }</button></div>
             </div></div>
+            
         </div>
      </div>
     </div>
