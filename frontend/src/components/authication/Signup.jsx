@@ -112,7 +112,7 @@ const {navigate}=useAppcontext()
   onChange={(e)=>setPassword(e.target.value)}
     className='w-full py-2 outline-none border-2 placeholder:p-3 indent-2 border-gray-300 rounded-md mb-3' placeholder='Enter your password' />
 </div>
-<div><button disabled={isLoding} type='submit' className={`w-full text-white  py-2 rounded-md ${isLoding?"cursor-not-allowed bg-blue-600":"bg-blue-600"} `} >{
+<div><button disabled={isLoding} type='submit' className={`w-full text-white  py-2 rounded-md ${isLoding?"cursor-not-allowed bg-blue-600":"bg-blue-600 "} `} >{
 isLoding?(<span className='flex   justify-center items-center gap-2'>
   <Loader className='animate-spin w-4 h-4'/>Registering...
 </span>):"Register"

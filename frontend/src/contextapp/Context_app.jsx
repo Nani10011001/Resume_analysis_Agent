@@ -10,10 +10,11 @@ import { createContext } from 'react'
 export  const Context_app = ({children}) => {
     const navigate=useNavigate()
       const userId=localStorage.getItem("token")
+      const resumeIdToken=localStorage.getItem("resumeId")
    const value={
 axios,
 navigate,
-userId
+userId,resumeIdToken
    }
   return (
     <AppContext.Provider value={value}>

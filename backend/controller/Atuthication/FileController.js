@@ -25,8 +25,8 @@ if(!userId){
         })
         
         formData.append("userId",userId)
-        const fastApiBaseUrl = env.FASTAPI_URL.replace('/api/chat', '/upload-resume');
-        const response=await axios.post(`${fastApiBaseUrl}/upload-resume`,formData,{
+        
+        const response=await axios.post(`http://localhost:7001/upload-resume`,formData,{
             headers:formData.getHeaders(),
             httpsAgent: agent
         })
