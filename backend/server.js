@@ -8,7 +8,10 @@ import cookieParser from "cookie-parser"
 import AgentRouter from "./router/agentRouter/Agentrouter.js"
 const app=express()
 
-app.use(cors())
+app.use(cors({
+  credentials: true,
+  origin: "http://localhost:5173"
+}))
 app.use(express.json())
 app.use(cookieParser())
 app.use("/api",router)

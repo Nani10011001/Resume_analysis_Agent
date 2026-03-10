@@ -1,0 +1,86 @@
+from RA_Agent.Graphs.state import Agent_state
+from RA_Agent.Config.llmConfig import get_llm
+from langchain_core.messages import AIMessage
+
+INTENTS = {
+    "greeting":             "User says hi, hello, hey, or any casual opener.",
+    "thanking":             "User says thanks, thank you, or shows appreciation.",
+    "general_chat":         "Casual conversation, off-topic, or unclear messages.",
+    "resume_review":        "User wants feedback or improvements on their resume/CV.",
+    "career_advice":        "User wants strategic career guidance or planning.",
+    "cover_letter":         "User wants to write or improve a cover letter.",
+    "job_search":           "User is looking for jobs or wants role recommendations.",
+    "interview_prep":       "User wants to prepare for an interview.",
+    "salary_negotiation":   "User wants advice on salary, offers, or negotiation.",
+    "skill_gap":            "User wants to identify missing skills for a target role.",
+    "resume_analysis":      "User wants a full resume analysis with scoring.",
+}
+
+INTENT_TO_NODE = {
+    "greeting":             "greeting_node",
+    "thanking":             "thanks_node",
+    "general_chat":         "general_chat_node",
+    "resume_review":        "retrieval_node",
+    "career_advice":        "retrieval_node",
+    "cover_letter":         "retrieval_node",
+    "job_search":           "retrieval_node",
+    "interview_prep":       "retrieval_node",
+    "salary_negotiation":   "retrieval_node",
+    "skill_gap":            "retrieval_node",
+    "resume_analysis":      "retrieval_node",
+}
+
+INTENT_TO_SPECIALIST = {
+    "resume_review":        "resume_review_node",
+    "career_advice":        "career_advice_node",
+    "cover_letter":         "cover_letter_node",
+    "job_search":           "job_search_node",
+    "interview_prep":       "interview_prep_node",
+    "salary_negotiation":   "salary_negotiation_node",
+    "skill_gap":            "skill_gap_node",
+    "resume_analysis":      "signal_node",    # full pipeline
+}
+llm=get_llm()
+
+
+def classifyIntentPrompt(user_message: str) -> str:
+    intent_definitions = "\n".join(
+        f"- {key}: {desc}" for key, desc in INTENTS.items()
+    )
+    print("intent_info: ----",intent_definitions)
+    return f"""
+You are an intent classifier for a resume analysis AI system called ResumeAgent.
+
+Return ONLY one intent label from the list below.
+No explanation. No punctuation. Just the label.
+
+Intents:
+{intent_definitions}
+
+User message: "{user_message}"
+
+Intent:
+""".strip()
+
+
+def intent_classifier_node(state: Agent_state) -> dict:
+    user_message = state["messages"][-1].content
+
+    response = llm.invoke(classifyIntentPrompt(user_message))
+
+    # Clean + validate LLM output — fallback to general_chat if unrecognized
+    raw    = response.content.strip().lower().strip("`\"' ")
+    intent = raw if raw in INTENTS else "general_chat"
+    print(f"[INTENT] message: {user_message}")
+    print(f"[INTENT] raw: {raw}")
+    print(f"[INTENT] final: {intent}")
+    return {"intent": intent}
+
+def route_by_intent(state: Agent_state) -> str:
+    intent = state.get("intent", "general_chat")
+    return INTENT_TO_NODE.get(intent, "general_chat_node")
+
+
+def route_after_retrieval(state: Agent_state) -> str:
+    intent = state.get("intent", "resume_analysis")
+    return INTENT_TO_SPECIALIST.get(intent, "signal_node")

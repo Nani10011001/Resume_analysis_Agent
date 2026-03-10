@@ -1,6 +1,5 @@
 import React from 'react'
 import { useState } from 'react'
-import axios from "axios"
 import toast from 'react-hot-toast'
 import { Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -12,7 +11,7 @@ const Signup = () => {
   const [password,setPassword]=useState("")
   const [isLoding,setIsLoading]=useState(false)
 
-const {navigate}=useAppcontext()
+const {navigate,axios,CheckAuthication}=useAppcontext()
   const inputHandler=async(e)=>{
     e.preventDefault()
     setIsLoading(true)
@@ -22,10 +21,11 @@ const {navigate}=useAppcontext()
       password
     }
     try {
-      const {data}= await axios.post("http://localhost:7000/api/signup",creditenial)
+      const {data}= await axios.post("/signup",creditenial)
       console.log(data)
       if(data.success){
  toast.success(data.message)
+ await CheckAuthication()
  navigate("/login")
       }
 

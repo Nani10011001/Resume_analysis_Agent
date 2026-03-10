@@ -54,6 +54,7 @@ return res.status(200).json({
     success:true,
     message:"signup successfully",
     userDetail:user,
+    jwt:jwtToken
    
     
 })
@@ -119,17 +120,27 @@ export const Login=async(req,res)=>{
                 message:"user does not exist"
             })
         }
-        const MatchPassword=bcrypt.compare(password,user.password)
+        const MatchPassword= await bcrypt.compare(password,user.password)
         if(!MatchPassword){
             return res.status(400).json({
                 success:false,
                 message:"password is invalid"
             })
         }
+        const jwtToken = jwt.sign({userId:user._id},env.JWT_SECRETE,{expiresIn:"7d"})
+        
+        res.cookie("token",jwtToken,{
+            httpOnly:true,
+            secure:process.env.NODE_ENV==="production",
+            sameSite:"strict",
+            maxAge:7*24*60*60*1000
+        })
+        
         return res.status(200).json({
             success:true,
             message:"login successfully",
-            userIdentity:userId
+            userIdentity:userId,
+            jwt:jwtToken
 
 
         })
@@ -142,7 +153,7 @@ export const Login=async(req,res)=>{
         
     }
 }
-export const logout=()=>{
+export const logout=(req,res)=>{
  try {
     res.clearCookie("token")
     return res.status(202).json({
@@ -157,4 +168,15 @@ export const logout=()=>{
             message:error.message
         })
  }
+}
+export const checkAuth=async(req,res)=>{
+    try {
+        return res.status(200).json({
+            success:true,
+            isAuthicated:true,
+            userId:req.userId
+        })
+    } catch (error) {
+        console.error(error)
+    }
 }

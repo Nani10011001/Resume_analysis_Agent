@@ -7,7 +7,7 @@ import toast from "react-hot-toast"
 const UploadResume = () => {
   const [pdf,setPdf]=useState(null)
   const [loading,setLoading]=useState(false)
-  const {axios,navigate,userId}=useAppcontext()
+  const {axios,navigate,userId, setResumeIdToken}=useAppcontext()
 
   const handelFileInput=async()=>{
 
@@ -35,7 +35,7 @@ const UploadResume = () => {
         } 
         const resumeId=data.resumeId
         localStorage.setItem("resumeId",resumeId)
-     
+     setResumeIdToken(resumeId)
           
       }
        catch (error) {

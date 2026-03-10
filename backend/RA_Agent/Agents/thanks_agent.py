@@ -1,24 +1,14 @@
 from langchain_core.messages import AIMessage
 from RA_Agent.Graphs.state import Agent_state
-def thanks_node(state: Agent_state):
-    msg=state["messages"][-1].content.lower().strip()
-    thanks_words=["thanks",
-        "thank you",
-        "thankyou",
-        "thanks a lot",
-        "thanks buddy",
-        "thx",
-        "ty"
-        "thank you so much",
-        "thanks bro"]
-    words=msg.split()
-    if len(words)==1 and words[0] in thanks_words:
-        return True
-    return False
-def Thanks_greet():
-    message=AIMessage(
-        content="You're welcome 😊. Let me know if you need help analyzing your resume or finding skill improvements."
+
+def thanks_node(state: Agent_state) -> dict:
+    message = AIMessage(
+        content="You're welcome 😊 Happy to help!\n\n"
+                "If you need anything else, I'm here for:\n\n"
+                "• 📄 More resume feedback\n"
+                "• 📊 ATS score breakdown\n"
+                "• 💼 Job search tips\n"
+                "• 🎯 Interview prep\n\n"
+                "Just ask anytime!"
     )
-    return {
-        "messages":[message]
-    }
+    return {"messages": [message]}

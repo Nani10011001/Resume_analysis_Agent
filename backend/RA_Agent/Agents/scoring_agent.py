@@ -4,6 +4,7 @@ from RA_Agent.NLP.spacy_ext import extract_resume_entities
 from RA_Agent.DbSearch.nlp_search import get_nlp_info
 from RA_Agent.NLP.ScoringPython import scoring_engine
 from RA_Agent.Graphs.state import Agent_state
+from RA_Agent.Agents.retrive_Agent import safe_object_id
 
 
 entity_runnable=RunnableLambda(extract_resume_entities)

@@ -15,16 +15,14 @@ def safe_object_id(value: str) -> ObjectId:
     except:
         return ObjectId()
     
-    
-def retrieve_node(state:Agent_state):
 
+def retrieve_node(state: Agent_state):
     query = state["messages"][-1].content
-
     user_id = safe_object_id(state["userId"])
     resume_id = safe_object_id(state["resume_id"])
 
-    query_embedding = embedding.embed_query(query)
 
+    query_embedding = embedding.embed_query(query)
     results = vector_search_resume(
         userid=user_id,
         resume_id=resume_id,
@@ -32,7 +30,4 @@ def retrieve_node(state:Agent_state):
     )
 
     chunks = [r["text"] for r in results] if results else []
-
-    return {
-        "retrieved_text": "\n".join(chunks)
-    }
+    return {"retrieved_text": "\n".join(chunks)}

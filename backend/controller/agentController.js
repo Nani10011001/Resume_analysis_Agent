@@ -1,69 +1,79 @@
-import { success } from "zod"
+// RA_Agent/controllers/agentController.js
 import { FileController } from "./Atuthication/FileController.js"
-
 import { pyDataSend } from "./pyDataSend.js"
 
-export const agentController=async(req,res)=>{
-  const {userId,content,resumeId}=req.body
-
+export const agentController = async (req, res) => {
+    const { userId, content, resumeId } = req.body
+console.log(resumeId)
     try {
-        if(!userId){
-           return res.status(401).json({
-            success:false,
-            message:"your not authorized"
-           })
-           
-        }
-        if(!userId){
-            return res.status(400).json({
-                success:false,
-                message:"Upload resumeid and ask the query"
-            })
-        }
-        if(!content){
-            return res.status(400).json({
-                success:false,
-                message:"provide the query"
-            })
-           }
-        res.setHeader("Content-Type","text/plain")
-        res.setHeader("Cache-Control","no-cache")
-        res.setHeader("Connection","keep-alive")
-        res.flushHeader?.()
-        for await (const chunks of pyDataSend({userId,content,resumeId})){
-  res.write(chunks)
-  console.log("agentReply: ",chunks)
-        }
-        console.log("streaming of data completed")
-res.end()
         
+        if (!userId) {
+            return res.status(401).json({
+                success: false,
+                message: "You are not authorized"
+            })
+        }
+
+        // ✅ fixed: check resumeId not userId again
+        if (!resumeId) {
+            return res.status(400).json({
+                success: false,
+                message: "Upload a resume first"
+            })
+        }
+
+        if (!content) {
+            return res.status(400).json({
+                success: false,
+                message: "Please provide a query"
+            })
+        }
+
+        res.setHeader("Content-Type", "text/plain")
+        res.setHeader("Cache-Control", "no-cache")
+        res.setHeader("Connection", "keep-alive")
+        res.flushHeaders?.()   // ✅ fixed: flushHeaders() not flushHeader()
+
+        for await (const chunk of pyDataSend({ userId, content, resumeId })) {
+            res.write(chunk)
+            console.log("agentReply:", chunk)
+        }
+
+        console.log("streaming completed")
+        res.end()
+
     } catch (error) {
         console.error(error)
-        return res.status(500).json({
-            success:false,
-            message:"Internal server error"
-        })
+        
+        if (!res.headersSent) {
+            return res.status(500).json({
+                success: false,
+                message: "Internal server error"
+            })
+        }
+        res.end()
     }
 }
 
-export const agentFileController=async(req,res)=>{
-    const {userId}=req.body
-    const file=req.file
+
+export const agentFileController = async (req, res) => {
+    const { userId } = req.body
+    const file = req.file
 
     try {
-      
-const fileUpload= await FileController(userId,file)
+        const fileUpload = await FileController(userId, file)
+        console.log(fileUpload.resumeId)
 
-console.log(fileUpload.resumeId)
         res.status(200).json({
-            success:true,
-            resumeId:fileUpload.resume_id
+            success: true,
+            resumeId: fileUpload.resume_id  
         })
+
     } catch (error) {
- console.error(error)
- res.status(500).json({
-    success:false,
-    message:"Internal sever error"
- })
+        console.error(error)
+        res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        })
     }
 }

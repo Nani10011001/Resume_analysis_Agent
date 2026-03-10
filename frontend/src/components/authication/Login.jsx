@@ -9,7 +9,7 @@ const Login = () => {
     const [password,setPassword]=useState("")
     const [isLoding,setIsLoading]=useState(false)
   
-  const {navigate,axios}=useAppcontext()
+  const {navigate,axios,CheckAuthication}=useAppcontext()
     const inputHandler=async(e)=>{
       e.preventDefault()
       setIsLoading(true)
@@ -23,10 +23,10 @@ const Login = () => {
         console.log(data)
         if(data.success){
    toast.success(data.message)
+   localStorage.setItem("token", data.userIdentity)
+   await CheckAuthication()
    navigate("/upload-resume")
         }
-      
-localStorage.setItem("token", data.userIdentity)
       } catch (error) {
         console.log(error)
         toast.error(error.response?.data?.message||"login failed")

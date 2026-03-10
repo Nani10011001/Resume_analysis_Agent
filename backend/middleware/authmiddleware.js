@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import { env } from "../config/ZodValidation"
+import { env } from "../config/ZodValidation.js"
 
 export const authMiddleware=async(req,res,next)=>{
        const token=req.cookies?.token
