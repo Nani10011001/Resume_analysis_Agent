@@ -1,6 +1,7 @@
 from langchain_core.messages import AIMessage
 from RA_Agent.Graphs.state import Agent_state
-
+from langsmith import traceable
+@traceable(name="thanks_node")
 def thanks_node(state: Agent_state) -> dict:
     message = AIMessage(
         content="You're welcome 😊 Happy to help!\n\n"

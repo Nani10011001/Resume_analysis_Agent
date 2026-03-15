@@ -1,5 +1,3 @@
-
-
 import os
 from functools import lru_cache
 from dotenv import load_dotenv
@@ -11,6 +9,7 @@ load_dotenv(os.path.join(os.path.dirname(__file__), "../../.env"))
 
 @lru_cache(maxsize=1)
 def get_llm() -> ChatGroq:
+
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
         raise ValueError("GROQ_API_KEY is missing from .env")
@@ -22,6 +21,6 @@ def get_llm() -> ChatGroq:
     return ChatGroq(
         api_key=api_key,
         model=model,
-        streaming=True,
-        temperature=0.7,
+        streaming=True
+   
     )

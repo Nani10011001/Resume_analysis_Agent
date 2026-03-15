@@ -38,7 +38,8 @@ async def chat_interface_send(req: ChatRequest):
             "signals": {},
             "score":   0,
             "score_breakdown": {},
-            "explanation":    ""
+            "explanation":    "",
+            "full_text":""
         })
 
         # ── Fix: read the right field based on what the graph returned ──
@@ -55,6 +56,14 @@ async def chat_interface_send(req: ChatRequest):
             ai_messages = [m for m in messages if isinstance(m, AIMessage)]
             ai_response = ai_messages[-1].content if ai_messages else "Sorry, I couldn't process that."
 
+        if not resumeId or resumeId.strip() == "":
+            return StreamingResponse(
+        stream_response(
+            "⚠️ Please upload your resume first before asking career questions. "
+            "I can only give personalized advice once I can see your resume!"
+        ),
+        media_type="text/plain"
+    )
         return StreamingResponse(
             stream_response(ai_response),
             media_type="text/plain"
@@ -62,4 +71,5 @@ async def chat_interface_send(req: ChatRequest):
 
     except Exception as e:
         print("Error:", e)
+        raise HTTPException(status_code=500, detail=str(e))
        

@@ -16,7 +16,7 @@ from RA_Agent.LLM_agent.Prompt.Prompty import (
 
 llm = get_llm()
 
-
+#general chat help us to get to chat with the ag
 def general_chat_node(state: Agent_state) -> dict:
     user_message = state["messages"][-1].content
     response = llm.invoke(generalPrompt(user_message))
@@ -46,7 +46,14 @@ def cover_letter_node(state: Agent_state) -> dict:
 
 def job_search_node(state: Agent_state) -> dict:
     user_message = state["messages"][-1].content
+
     retrieved_text = state.get("retrieved_text", "No resume context available.")
+    
+
+    # if no resume uploaded, give general advice
+    if not retrieved_text.strip():
+        retrieved_text = "No resume uploaded yet. Give general job search advice."
+
     response = llm.invoke(jobSearchPrompt(user_message, retrieved_text))
     return {"messages": [AIMessage(content=response.content)]}
 

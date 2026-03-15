@@ -3,7 +3,9 @@ from langchain_core.messages import SystemMessage,HumanMessage
 import json
 from RA_Agent.SystemPromt.E_prompt import explain_Agent_prompt
 from RA_Agent.Config.llmConfig import get_llm
+from langsmith import traceable
 llm=get_llm()
+@traceable(name="explanation_agent")
 def explanation_node(state: Agent_state):
 
     user_question = state["messages"][-1].content

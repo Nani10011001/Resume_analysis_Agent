@@ -3,6 +3,9 @@ import hashlib
 from RA_Agent.Graphs.state import Agent_state
 from RA_Agent.VectorSearch.vector_search import vector_search_resume
 from RA_Agent.Config.EmbConfig import embedding
+from langchain_core.runnables import RunnableParallel,RunnableLambda
+from RA_Agent.DbSearch.nlp_search import get_nlp_info
+from langsmith import traceable
 def safe_object_id(value: str) -> ObjectId:
 
     try:
@@ -15,19 +18,43 @@ def safe_object_id(value: str) -> ObjectId:
     except:
         return ObjectId()
     
-
+@traceable(name="retrive_node")
 def retrieve_node(state: Agent_state):
     query = state["messages"][-1].content
-    user_id = safe_object_id(state["userId"])
-    resume_id = safe_object_id(state["resume_id"])
-
-
+    user_id_str = state["userId"]
+    resume_id_str = state.get("resume_id", "")  
+    # guard first before any conversion
+    if not resume_id_str or resume_id_str.strip() == "":
+        return {
+            "retrieved_text": "No resume uploaded yet. Give general advice.",
+            "full_text": ""
+        }
+    user_id=safe_object_id(user_id_str)
+    resume_id = safe_object_id(resume_id_str)
     query_embedding = embedding.embed_query(query)
-    results = vector_search_resume(
-        userid=user_id,
+
+    
+
+    #parallel fetching of the data things
+    parallel_fetch=RunnableParallel(
+        retrieved_text=RunnableLambda(
+            lambda _:"\n".join(r["text"] for r in vector_search_resume(
+                 userid=user_id,
         resume_id=resume_id,
         query_embedding=query_embedding
+            ))
+        ),
+        full_text=RunnableLambda(
+            lambda _:get_nlp_info(
+                userId=user_id,
+                resume_id=resume_id
+                
+            )
+        )
     )
 
-    chunks = [r["text"] for r in results] if results else []
-    return {"retrieved_text": "\n".join(chunks)}
+
+    results = parallel_fetch.invoke({})
+    
+    return {"retrieved_text": results["retrieved_text"],
+            "full_text":results["full_text"]}

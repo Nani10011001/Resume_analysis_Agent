@@ -60,20 +60,20 @@ def build_graph():
     graph.add_node("scoring_node",            scoring_node)
     graph.add_node("explanation_node",        explanation_node)
 
-    # ── Step 2: Entry point ──────────────────────────────────────────────────
+    # ── Step 2: Entry point 
     # Every single run starts here — no exceptions
     graph.set_entry_point("intent_classifier_node")
 
-    # ── Conditional edges — NO explicit map, trust the functions ────────────
+    # ── Conditional edges — NO explicit map, trust the functions
     graph.add_conditional_edges("intent_classifier_node", route_by_intent)
     graph.add_conditional_edges("retrieval_node", route_after_retrieval)
 
-    # ── Step 5: Full analysis pipeline edges ─────────────────────────────────
+    # ── Step 5: Full analysis pipeline edges
     graph.add_edge("signal_node",      "scoring_node")
     graph.add_edge("scoring_node",     "explanation_node")
     graph.add_edge("explanation_node", END)
 
-    # ── Step 6: Specialist nodes → END ───────────────────────────────────────
+    # ── Step 6: Specialist nodes → END 
     graph.add_edge("resume_review_node",      END)
     graph.add_edge("career_advice_node",      END)
     graph.add_edge("cover_letter_node",       END)
@@ -82,7 +82,7 @@ def build_graph():
     graph.add_edge("salary_negotiation_node", END)
     graph.add_edge("skill_gap_node",          END)
 
-    # ── Step 7: Simple nodes → END ───────────────────────────────────────────
+    # ── Step 7: Simple nodes → END 
     graph.add_edge("greeting_node",      END)
     graph.add_edge("thanks_node",        END)
     graph.add_edge("general_chat_node",  END)

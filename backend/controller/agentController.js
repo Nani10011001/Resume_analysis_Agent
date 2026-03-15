@@ -14,7 +14,6 @@ console.log(resumeId)
             })
         }
 
-        // ✅ fixed: check resumeId not userId again
         if (!resumeId) {
             return res.status(400).json({
                 success: false,
@@ -32,7 +31,7 @@ console.log(resumeId)
         res.setHeader("Content-Type", "text/plain")
         res.setHeader("Cache-Control", "no-cache")
         res.setHeader("Connection", "keep-alive")
-        res.flushHeaders?.()   // ✅ fixed: flushHeaders() not flushHeader()
+        res.flushHeaders?.()   
 
         for await (const chunk of pyDataSend({ userId, content, resumeId })) {
             res.write(chunk)

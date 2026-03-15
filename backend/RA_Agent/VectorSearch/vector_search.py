@@ -4,7 +4,7 @@ from RA_Agent.Db.pyDb import embedding_db
 def vector_search_resume(userid:ObjectId,
                          query_embedding:list[float],
                         resume_id:ObjectId,
-                         top_k:int=5):
+                         top_k:int=10):
     pipeline = [
         {
             "$vectorSearch": {
