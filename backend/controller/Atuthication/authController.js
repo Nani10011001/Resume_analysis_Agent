@@ -3,8 +3,9 @@ import { User } from "../../DB/authication/user.auth.js"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs"
 import { env } from "../../config/ZodValidation.js"
-import { otpGenerator } from "../../utils/otpGenerator.js"
-import { otpSentEmail } from "../../utils/emailService.js"
+
+import { SentEmail } from "../../utils/emailService.js"
+
 export const signUp =async(req,res)=>{
     try {
         const {username,email,password}=req.body
@@ -27,15 +28,13 @@ const userAleardyExit=await User.findOne({email})
         const hashPassword=await bcrypt.hash(password,10)
          const otp=otpGenerator()
 
-    /*    
-       // await otpSentEmail(email,otp) */
+    await otpSentEmail() 
         
         const user=await User.create({
             username:username,
             email:email,
             password:hashPassword,
-            emailOtp:otp,
-         otpExpiry:Date.now()+3*60*1000
+           
 
 
         })
@@ -44,10 +43,10 @@ const userAleardyExit=await User.findOne({email})
             
         res.cookie("token",jwtToken,{
             httpOnly:true,
-            secure:process.env.NODE_ENV==="production",
-            sameSite:"strict",
+            secure: env.NODE_ENV === "production",
+            sameSite: env.NODE_ENV === "production" ? "strict" : "lax",
             maxAge:7*24*60*60*1000
-       
+      
         })
     
 return res.status(200).json({
@@ -68,7 +67,7 @@ return res.status(200).json({
         })
     }
 }
-export const OtpverifyPage=async(req,res)=>{
+/* export const OtpverifyPage=async(req,res)=>{
     const {email,otp}=req.body
 
     try {
@@ -79,15 +78,8 @@ export const OtpverifyPage=async(req,res)=>{
         })
     }
     const user=await User.findOne({email})
-    if(user.emailOtp!==otp || Date.now()>user.otpExpiry){
-        return res.status(400).json({
-            sucess:false,
-            message:"invalid OTP or OTP is Expired"
-        })
-    }
+    
   
-           user.emailOtp=null
-    user.otpExpiry=null
     await user.save()
 
     return res.status(200).json({
@@ -101,7 +93,7 @@ export const OtpverifyPage=async(req,res)=>{
         message:"Internal error"
        }) 
     }
-}
+} */
 export const Login=async(req,res)=>{
     try {
         const {email,password}=req.body
@@ -131,8 +123,8 @@ export const Login=async(req,res)=>{
         
         res.cookie("token",jwtToken,{
             httpOnly:true,
-            secure:process.env.NODE_ENV==="production",
-            sameSite:"strict",
+            secure: env.NODE_ENV === "production",
+            sameSite: env.NODE_ENV === "production" ? "strict" : "lax",
             maxAge:7*24*60*60*1000
         })
         

@@ -16,6 +16,7 @@ const [resumeIdToken, setResumeIdToken] = useState(
     localStorage.getItem("resumeId") || ""  )
       const [isLodingAUth,setIsLoadingAuth]=useState(false)
       const [jwtToken,setJwtToken]=useState("")
+      const [resumeSessionActive, setResumeSessionActive] = useState(false)
      const CheckAuthication=async()=>{
       try {
         const {data}=await axios.get("/auth-status")
@@ -33,6 +34,19 @@ setJwtToken(data.userId)
      useEffect(()=>{
 CheckAuthication()
      },[])
+
+     // Activate resume session when component mounts (user enters chat)
+     useEffect(() => {
+       if (resumeIdToken) {
+         setResumeSessionActive(true)
+       }
+       
+       // Cleanup: deactivate when user leaves
+       return () => {
+         setResumeSessionActive(false)
+       }
+     }, [resumeIdToken])
+
    const value={
 axios,
 navigate,
@@ -41,7 +55,9 @@ resumeIdToken,
 setResumeIdToken,
 isLodingAUth,
 CheckAuthication,
-jwtToken
+jwtToken,
+resumeSessionActive,
+setResumeSessionActive
    }
   return (
     <AppContext.Provider value={value}>

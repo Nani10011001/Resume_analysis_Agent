@@ -10,7 +10,7 @@ import UploadResume from './pages/UploadResume.jsx'
 import OtpVerify from './components/authication/OtpVerify.jsx'
 const App = () => {
   return (
-    <div className="px-10 py-5 min-h-screen bg-gradient-to-br from-gray-100 to-blue-50">
+    <div className="px-10 py-5 min-h-screen bg-[radial-gradient(ellipse_at_top_left,_#1a0533_0%,_#0d0d0d_60%)] text-white">
       <Toaster/>
  
       <Routes>

@@ -18,18 +18,8 @@ const userSchema=new mongoose.Schema({
         required:true,
 
     },
-    emailOtp:{
-        type:String,
-  
 
-    },
-otpExpiry:{
-type:Date,
-},
-  isVerifeid:{
-    type:Boolean,
-    default:false
-  }
+
 
 },{timestamps:true
 })

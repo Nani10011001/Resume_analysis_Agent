@@ -6,6 +6,7 @@ import DatabaseConnect from "./DB/dbconntect.js"
 import router from "./router/authrouter.js"
 import cookieParser from "cookie-parser"
 import AgentRouter from "./router/agentRouter/Agentrouter.js"
+import { redisConnect } from "./DB/Redis/redisConnection.js"
 const app=express()
 
 app.use(cors({
@@ -21,6 +22,7 @@ const serverStart=async()=>{
     try {
         app.listen(env.PORT,()=>console.log(`server running at${process.env.PORT}`))
      await DatabaseConnect()
+     await redisConnect()
     } catch (error) {
         console.log("server starting error",error)
         process.exit(1)

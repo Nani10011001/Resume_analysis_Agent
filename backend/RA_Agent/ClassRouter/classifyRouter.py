@@ -1,6 +1,7 @@
 from RA_Agent.Graphs.state import Agent_state
 from RA_Agent.Config.llmConfig import get_llm
 from langchain_core.messages import AIMessage
+from langsmith import traceable
 
 INTENTS = {
     "greeting":             "User says hi, hello, hey, or any casual opener.",
@@ -42,7 +43,7 @@ INTENT_TO_SPECIALIST = {
 }
 llm=get_llm()
 
-
+@traceable(name="classifyIntenrprompt")
 def classifyIntentPrompt(user_message: str) -> str:
     intent_definitions = "\n".join(
         f"- {key}: {desc}" for key, desc in INTENTS.items()
@@ -62,7 +63,7 @@ User message: "{user_message}"
 Intent:
 """.strip()
 
-
+@traceable(name="intent_classify_node")
 def intent_classifier_node(state: Agent_state) -> dict:
     user_message = state["messages"][-1].content
 
@@ -75,12 +76,12 @@ def intent_classifier_node(state: Agent_state) -> dict:
     print(f"[INTENT] raw: {raw}")
     print(f"[INTENT] final: {intent}")
     return {"intent": intent}
-
+@traceable(name="router_by_intent")
 def route_by_intent(state: Agent_state) -> str:
     intent = state.get("intent", "general_chat")
     return INTENT_TO_NODE.get(intent, "general_chat_node")
 
-
+@traceable(name="router_after_retrival")
 def route_after_retrieval(state: Agent_state) -> str:
     intent = state.get("intent", "resume_analysis")
     return INTENT_TO_SPECIALIST.get(intent, "signal_node")

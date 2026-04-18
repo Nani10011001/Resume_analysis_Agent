@@ -28,6 +28,7 @@ console.log(resumeId)
             })
         }
 
+
         res.setHeader("Content-Type", "text/plain")
         res.setHeader("Cache-Control", "no-cache")
         res.setHeader("Connection", "keep-alive")
@@ -58,7 +59,6 @@ console.log(resumeId)
 export const agentFileController = async (req, res) => {
     const { userId } = req.body
     const file = req.file
-
     try {
         const fileUpload = await FileController(userId, file)
         console.log(fileUpload.resumeId)

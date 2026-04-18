@@ -6,7 +6,7 @@ export const authMiddleware=async(req,res,next)=>{
         if(!token){
          return res.status(404).json({
             success:false,
-            message:"authication token is missing"
+            message:"your not registered or auth token is expried"
          })
 
         }

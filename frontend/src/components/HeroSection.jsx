@@ -5,7 +5,7 @@ const HeroSection = () => {
   return (
     <div className='flex flex-col  justify-center items-center mt-32'>
       
-    <p className='flex gap-2 bg-blue-200/50 p-1  text-sm text-blue-400  px-2 rounded-2xl'>
+    <p className='flex gap-2  p-2 px-6 bg-blue-100/10   text-sm text-blue-400  px-2 rounded-2xl'>
          <span><Sparkles className='w-5'/></span>Ai powered Analysis</p>
 
       <div>

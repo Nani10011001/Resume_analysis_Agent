@@ -96,21 +96,21 @@ const {navigate,axios,CheckAuthication}=useAppcontext()
   value={username}
   onChange={(e)=>setUsername(e.target.value)}
   type="text" 
-  className='w-full py-2 outline-none border-2 placeholder:p-3 indent-2 border-gray-300 rounded-md mb-3' placeholder='Enter your name' /></div>
+  className='w-full py-2 outline-none border-2 placeholder:p-3 indent-2 border-gray-600 rounded-md mb-3' placeholder='Enter your name' /></div>
   <div  className='flex flex-col gap-2 '>
     <label className='text-sm font-bold' htmlFor="">Email address</label>
     <input 
     value={email}
     onChange={(e)=>setEmail(e.target.value)}
     type="text"  placeholder='Enter your email'
-      className='w-full py-2 outline-none border-2 placeholder:p-3 indent-2 border-gray-300 rounded-md mb-3' />
+      className='w-full py-2 outline-none border-2 placeholder:p-3 indent-2 border-gray-600 rounded-md mb-3' />
     </div>
 <div className='flex flex-col gap-2 '>
   <label className='text-sm font-bold' htmlFor="">password</label>
   <input type="password" 
   value={password}
   onChange={(e)=>setPassword(e.target.value)}
-    className='w-full py-2 outline-none border-2 placeholder:p-3 indent-2 border-gray-300 rounded-md mb-3' placeholder='Enter your password' />
+    className='w-full py-2 outline-none border-2 placeholder:p-3 indent-2 border-gray-600 rounded-md mb-3' placeholder='Enter your password' />
 </div>
 <div><button disabled={isLoding} type='submit' className={`w-full text-white  py-2 rounded-md ${isLoding?"cursor-not-allowed bg-blue-600":"bg-blue-600 "} `} >{
 isLoding?(<span className='flex   justify-center items-center gap-2'>

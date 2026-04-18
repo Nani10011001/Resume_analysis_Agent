@@ -4,10 +4,11 @@ import NavBar from '../components/NavBar'
 import { Loader, Upload } from 'lucide-react'
 import { useAppcontext } from '../contextapp/Context_app'
 import toast from "react-hot-toast"
+import axios from 'axios'
 const UploadResume = () => {
   const [pdf,setPdf]=useState(null)
   const [loading,setLoading]=useState(false)
-  const {axios,navigate,userId, setResumeIdToken}=useAppcontext()
+  const {navigate,userId, setResumeIdToken}=useAppcontext()
 
   const handelFileInput=async()=>{
 
@@ -25,12 +26,17 @@ const UploadResume = () => {
         const formData=new FormData()
         formData.append("file",pdf)
         formData.append("userId",userId)
-
-        const {data} = await axios.post("/agent/upload/resume", formData)
+    
+        const {data} = await axios.post(
+          "http://localhost:7000/api/agent/upload/resume",
+          formData,
+          { withCredentials: true }
+        )
         console.log(data)
 
         if(data?.success){
           toast.success("File uploaded successfully")
+          localStorage.setItem("resumeFileName", pdf.name)
           navigate("/chat-ui")
         } 
         const resumeId=data.resumeId
