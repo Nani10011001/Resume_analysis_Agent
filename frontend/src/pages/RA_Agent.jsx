@@ -182,7 +182,7 @@ const hasStarted = message.length > 0
 
     <Sparkles size={40} className="text-blue-500 mb-4" />
 
-    <h1 className="text-3xl font-bold text-blue-700">Resume Agent</h1>
+    <h1 className="text-4xl font-bold text-blue-700 ">Resume Agent</h1>
     <p className="text-gray-500 mt-2">
       AI-powered resume assistant
     </p>
@@ -249,7 +249,7 @@ const hasStarted = message.length > 0
           className={`${
             msg.role === "user"
               ? "bg-blue-500 text-white rounded-3xl px-6 py-3 max-w-2xl"
-              : " border rounded-xl px-6 py-4 max-w-2xl shadow-sm"
+              : " border rounded-xl px-6 py-4 text-white max-w-2xl shadow-sm"
           }`}
         >
 
@@ -270,7 +270,7 @@ const hasStarted = message.length > 0
     {streamResponse && (
       <div className="flex items-start gap-3">
         <Sparkles size={20} className="text-blue-500 mt-1" />
-        <div className=" border rounded-xl px-6 py-4 max-w-2xl shadow-sm">
+        <div className=" border rounded-xl px-6 py-4 max-w-2xl  text-white shadow-sm">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {streamResponse}
           </ReactMarkdown>
@@ -313,7 +313,7 @@ const hasStarted = message.length > 0
 
  
 {
-  hasStarted&&(<div className=" border-t border-gray-200 p-6 flex-shrink-0">
+  hasStarted&&(<div className="  p-6 flex-shrink-0">
 
         <div className="max-w-4xl mx-auto">
 
@@ -326,7 +326,7 @@ const hasStarted = message.length > 0
               disabled={isLoading}
               type="text"
               placeholder="Ask me any question about your resume..."
-              className="w-full py-3 pl-5 pr-14 outline-none border border-gray-300 rounded-full placeholder:text-gray-400 bg-gray-50 focus:bg-white focus:border-blue-400 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 pl-5 pr-14 outline-none border bg-gray-800 border-gray-300 rounded-full placeholder:text-gray-400  focus:bg-gray-700 text-white focus:border-white transition disabled:opacity-50 disabled:cursor-not-allowed"
             />
 
             <button

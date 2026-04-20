@@ -81,7 +81,7 @@ const UploadResume = () => {
 
     <div className="flex items-center  gap-2">
       📄
-      <p className="text-sm font-medium">{pdf.name}</p>
+      <p className=" text-black text-sm font-medium">{pdf.name}</p>
     </div>
 
     <button

@@ -1,0 +1,35 @@
+[project]
+name = "RA_Agent"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Nani10011001",email = "nani1531323@gmail.com"}
+]
+requires-python = ">=3.12,<3.15"
+dependencies = [
+    "langchain (>=1.2.15,<2.0.0)",
+    "langgraph (>=1.1.8,<2.0.0)",
+    "fastapi (>=0.136.0,<0.137.0)",
+    "fastmcp (>=3.2.4,<4.0.0)",
+    "langchain-groq (>=1.1.2,<2.0.0)",
+    "uvicorn (>=0.44.0,<0.45.0)",
+    "pymongo (>=4.16.0,<5.0.0)",
+    "spacy (>=3.8.14,<4.0.0)",
+    "langchain-community (>=0.4.1,<0.5.0)",
+    "langchain-huggingface (>=1.2.2,<2.0.0)",
+    "python-dotenv (>=1.2.2,<2.0.0)",
+    "tiktoken (>=0.12.0,<0.13.0)",
+    "python-docx (>=1.2.0,<2.0.0)",
+    "pypdf (>=6.10.2,<7.0.0)",
+    "sse-starlette (>=3.3.4,<4.0.0)",
+    "sentence-transformers (>=5.4.1,<6.0.0)",
+    "langsmith (>=0.7.32,<0.8.0)",
+    "exa-py (>=2.12.0,<3.0.0)",
+    "langchain-mcp-adapters (>=0.2.2,<0.3.0)"
+]
+
+[tool.poetry]
+package-mode = false
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
