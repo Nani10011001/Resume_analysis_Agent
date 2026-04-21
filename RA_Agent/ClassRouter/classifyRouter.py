@@ -21,14 +21,14 @@ INTENT_TO_NODE = {
     "greeting":             "greeting_node",
     "thanking":             "thanks_node",
     "general_chat":         "general_chat_node",
-    "resume_review":        "retrieval_node",
+    "resume_review":        "signal_node",
     "career_advice":        "retrieval_node",
     "cover_letter":         "retrieval_node",
     "job_search":           "retrieval_node",
     "interview_prep":       "retrieval_node",
     "salary_negotiation":   "retrieval_node",
     "skill_gap":            "retrieval_node",
-    "resume_analysis":      "retrieval_node",
+    "resume_analysis":      "signal_node",
 }
 
 INTENT_TO_SPECIALIST = {
@@ -39,7 +39,7 @@ INTENT_TO_SPECIALIST = {
     "interview_prep":       "interview_prep_node",
     "salary_negotiation":   "salary_negotiation_node",
     "skill_gap":            "skill_gap_node",
-    "resume_analysis":      "signal_node",    # full pipeline
+    "resume_analysis":      "resume_review_node",    # full pipeline
 }
 llm=get_llm()
 
@@ -77,11 +77,34 @@ def intent_classifier_node(state: Agent_state) -> dict:
     print(f"[INTENT] final: {intent}")
     return {"intent": intent}
 @traceable(name="router_by_intent")
+
 def route_by_intent(state: Agent_state) -> str:
     intent = state.get("intent", "general_chat")
     return INTENT_TO_NODE.get(intent, "general_chat_node")
 
 @traceable(name="router_after_retrival")
-def route_after_retrieval(state: Agent_state) -> str:
-    intent = state.get("intent", "resume_analysis")
-    return INTENT_TO_SPECIALIST.get(intent, "signal_node")
+def route_after_retrieval(state):
+    intent = state.get("intent", "")
+
+    if intent == "resume_analysis":
+        return "signal_node"
+
+    elif intent == "career_advice":
+        return "career_advice_node"
+
+    elif intent == "job_search":
+        return "job_search_node"
+
+    elif intent == "cover_letter":
+        return "cover_letter_node"
+
+    elif intent == "interview_prep":
+        return "interview_prep_node"
+
+    elif intent == "salary_negotiation":
+        return "salary_negotiation_node"
+
+    elif intent == "skill_gap":
+        return "skill_gap_node"
+
+    return "general_chat_node"

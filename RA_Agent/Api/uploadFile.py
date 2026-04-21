@@ -49,7 +49,7 @@ async def upload_resume(userId: str = Form(), file: UploadFile = File()):
         chunks = text_splitter.split_documents(docs)
         chunks_texts = [d.page_content for d in chunks]
 
-        embeddings = embedding.embed_documents(chunks_texts)
+        embeddings =  embedding.embed_documents(chunks_texts)
 
         entities = extract_resume_entities(full_text)
         experience = extract_experience(full_text)

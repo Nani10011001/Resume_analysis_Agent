@@ -13,7 +13,7 @@ export  const Context_app = ({children}) => {
     const navigate=useNavigate()
       const userId=localStorage.getItem("token")
 const [resumeIdToken, setResumeIdToken] = useState(
-    localStorage.getItem("resumeId") || ""  )
+    sessionStorage.getItem("resumeId") || ""  )
       const [isLodingAUth,setIsLoadingAuth]=useState(false)
       const [jwtToken,setJwtToken]=useState("")
       const [resumeSessionActive, setResumeSessionActive] = useState(false)

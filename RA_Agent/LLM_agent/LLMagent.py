@@ -3,6 +3,9 @@ from langsmith import traceable
 from langchain_core.messages import AIMessage
 from Graphs.state import Agent_state
 from Config.llmConfig import get_llm
+from NLP.ScoringPython import scoring_engine
+from langchain_core.messages import HumanMessage,AIMessage,SystemMessage
+from langchain_mcp_adapters.client import MultiServerMCPClient
 from LLM_agent.Prompt.Prompty import (
     generalPrompt,
     resumeReviewPrompt,
@@ -13,8 +16,7 @@ from LLM_agent.Prompt.Prompty import (
     salaryNegotiationPrompt,
     skillGapPrompt,
 )
-from langchain_core.messages import HumanMessage,AIMessage,SystemMessage
-from langchain_mcp_adapters.client import MultiServerMCPClient
+
 llm = get_llm()
 @traceable(name="general_chat_agent")
 #general chat help us to get to chat with the ag
@@ -24,11 +26,30 @@ def general_chat_node(state: Agent_state) -> dict:
     return {"messages": [AIMessage(content=response.content)]}
 
 @traceable(name = "resume_review_node")
+# Agents/resume_review_agent.py
+
+
 def resume_review_node(state: Agent_state) -> dict:
-    user_message = state["messages"][-1].content
-    retrieved_text = state.get("retrieved_text", "No resume content available.")
-    response = llm.invoke(resumeReviewPrompt(user_message, retrieved_text))
-    return {"messages": [AIMessage(content=response.content)]}
+    retrieved_text = state.get("retrieved_text", "")
+    full_text      = state.get("full_text", "")
+    user_message   = state["messages"][-1].content
+    # Scoring 
+    spacy_entities   = state.get("spacy_entities", {})
+    spacy_experience = state.get("spacy_experience", [])
+    signals          = state.get("signals", {})
+
+    score_result = scoring_engine(spacy_entities, spacy_experience, signals, full_text)
+    score_breakdown = score_result  # {"total_score": ..., "breakdown": {...}}
+    # Review
+    prompt   = resumeReviewPrompt(user_message, retrieved_text, score_breakdown)
+    response = llm.invoke(prompt)
+
+    return {
+        "messages":      [AIMessage(content=response.content)],
+        "score_breakdown": score_breakdown
+    }
+
+    
 
 @traceable(name = "career_advice_node")
 def career_advice_node(state: Agent_state) -> dict:
@@ -77,18 +98,24 @@ Rules:
     smart_query = extraction.content.strip()
     print("Smart query:", smart_query)   # → "Senior Architect NYC 10 years"
 
-    # ── 2. Use smart query for MCP search ─────────────────────────────────────
+    # ── 2. Use smart query for MCP search
     web_results = "Search unavailable."
     try:
         tools = await mcp_client.get_tools()
-        web_search_tool = next(t for t in tools if t.name == "webMcp")
-        raw = await web_search_tool.ainvoke({"query": smart_query})  # ← resume-based query
-        
-        print("MCP raw result:", raw)
-        web_results = str(raw)[:500]
-
+        print("tools object",tools)
+        print("AVAILABLE TOOL NAMES:", [t.name for t in tools])
+        web_search_tools = next(
+            (t for t in tools if t.name == "web_search"),
+            None
+        )
+        raw = await web_search_tools.ainvoke({
+            "query":smart_query
+        })
+        print(raw)
+        web_results = str(raw)[:1000]
+       
     except Exception as e:
-        print("MCP ERROR:", e)
+        print("MCP ERROR:", repr(e))
         web_results = f"Search unavailable: {e}"
 
     # ── 3. Pass everything to prompt ──────────────────────────────────────────

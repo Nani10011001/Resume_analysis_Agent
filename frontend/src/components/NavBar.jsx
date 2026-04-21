@@ -13,10 +13,10 @@ try {
   const {data}= await axios.post("/logout")
   if(data.success){
     await CheckAuthication()
-    localStorage.removeItem("resumId")
+    sessionStorage.removeItem("resumId")
     setResumeIdToken("")
     localStorage.removeItem("token")
-    localStorage.removeItem("resumeFileName")
+    sessionStorage.removeItem("resumeFileName")
     navigate("/")
     return toast.success("logout successfull")
   }

@@ -44,7 +44,7 @@ no resume uploaded
 # 2. RESUME REVIEW
 
 
-def resumeReviewPrompt(user_message: str, retrieved_text: str) -> str:
+def resumeReviewPrompt(user_message: str, retrieved_text: str, score_breakdown: str) -> str:
     return f"""
 You are an elite resume coach and ATS optimization expert 📄
 
@@ -52,30 +52,53 @@ You are an elite resume coach and ATS optimization expert 📄
 Give a brutally honest, highly specific review of this resume.
 Generic advice is useless — every point must reference actual resume content.
 
+## Score Breakdown
+{score_breakdown}
+
+These scores are final. Use them as the foundation of your entire review.
+Every strength, weakness, and suggestion must align with and explain these scores.
+
 ## Output Format
 Use EXACTLY this structure:
 
-### ✅ Strengths
-- [Specific strength 1 — quote or reference actual resume content]
-- [Specific strength 2]
-- [Specific strength 3]
+Return the response in STRICT markdown format.
 
-### ⚠️ Weaknesses
-- [Specific weakness 1 — explain WHY it's a problem]
-- [Specific weakness 2]
-- [Specific weakness 3]
+Structure:
 
-### ⚡ Quick Wins (Do These TODAY)
-1. [Concrete change #1 — be specific, not vague]
-2. [Concrete change #2]
-3. [Concrete change #3]
+# 📊 Score Breakdown
+- Achievement Impact: X/25 → explanation
+- Skill Depth: X/20 → explanation
+- Experience Progression: X/15 → explanation
+- Project Complexity: X/15 → explanation
+- Clarity: X/10 → explanation
+- Structure: X/10 → explanation
+- Section Completeness: X/5 → explanation
 
-### 🎯 Overall Verdict
-[One brutally honest sentence. Don't sugarcoat.]
+# ✅ Strengths
+- Point 1
+- Point 2
+
+# ⚠️ Weaknesses
+- Point 1
+- Point 2
+
+# ⚡ Quick Wins
+1. Action 1
+2. Action 2
+
+# 🎯 Overall Verdict
+Short paragraph.
+
+Rules:
+- Use bullet points
+- Use line breaks
+- No long paragraphs
+- Keep sections separate
 
 ## Strict Rules
-- NEVER say "consider adding" without saying exactly WHAT to add
+- NEVER recalculate or modify the provided scores
 - NEVER give advice that isn't backed by something in the resume
+- NEVER say "consider adding" without saying exactly WHAT to add
 - Reference job titles, company names, skills — use their actual words
 - If something is missing entirely (e.g. no education section), call it out
 

@@ -13,7 +13,7 @@ class ChatRequest(BaseModel):
     content:  str
     resume_id: str = Field(alias="resumeId")
 
-# ── ObjectId Serializer ───────────────────────────────────────────────────────
+#ObjectId Serializer
 def serialize_mongo(obj):
     if isinstance(obj, list):
         return [serialize_mongo(i) for i in obj]
@@ -36,7 +36,7 @@ async def chat_interface_send(req: ChatRequest):
     resumeId = req.resume_id
     query    = req.content
 
-    # ── Guard: no resume uploaded ─────────────────────────────────────────────
+    #  no resume uploaded
     if not resumeId or resumeId.strip() == "":
         return StreamingResponse(
             stream_response(
@@ -53,10 +53,9 @@ async def chat_interface_send(req: ChatRequest):
             "messages":       [HumanMessage(content=query)],
             "intent":         "",
             "retrieved_text": " ",
-            "signals":        {},
             "score":          0,
             "score_breakdown": {},
-            "explanation":    "",
+         
             "full_text":      ""
         })
 

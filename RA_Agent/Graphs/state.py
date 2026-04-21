@@ -10,6 +10,5 @@ class Agent_state(TypedDict):
     signals: Dict[str, Any]
     score: float
     score_breakdown: Dict[str, Any]
-    explanation: str
     intent:str
     full_text:str

@@ -36,11 +36,11 @@ const UploadResume = () => {
 
         if(data?.success){
           toast.success("File uploaded successfully")
-          localStorage.setItem("resumeFileName", pdf.name)
+          sessionStorage.setItem("resumeFileName", pdf.name)
           navigate("/chat-ui")
         } 
         const resumeId=data.resumeId
-        localStorage.setItem("resumeId",resumeId)
+        sessionStorage.setItem("resumeId",resumeId)
      setResumeIdToken(resumeId)
           
       }
