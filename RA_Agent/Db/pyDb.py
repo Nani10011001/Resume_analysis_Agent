@@ -14,10 +14,7 @@ try:
     db = client["resumeDataAgent"]
     embedding_db=db["resumeEmbeddings"]
     nlp_db=db["NLP_info"]
-    print("db data created")
+    
 except Exception as e:
     raise RuntimeError(f"db connection python error: {e}")
 
-print("Connected DB:", db.name)
-
-print("collection",embedding_db.name)

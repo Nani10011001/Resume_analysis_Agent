@@ -4,6 +4,10 @@ from pydantic import BaseModel, ConfigDict, Field
 from langchain_core.messages import AIMessage, HumanMessage
 from bson import ObjectId
 import time
+from Config.logger import setup_logger
+setup_logger()
+import logging
+logger = logging.getLogger(__name__)
 
 from Graphs.graph_builder import Agent_app
 
@@ -76,5 +80,5 @@ async def chat_interface_send(req: ChatRequest):
         )
 
     except Exception as e:
-        print("Error:", e)
+        logging.exception("error at agent streaming: ",e)
         raise HTTPException(status_code=500, detail=str(e))

@@ -96,7 +96,7 @@ Rules:
  # → "Senior Architect New York job opening"
     
     smart_query = extraction.content.strip()
-    print("Smart query:", smart_query)   # → "Senior Architect NYC 10 years"
+    # → "Senior Architect NYC 10 years"
 
     # ── 2. Use smart query for MCP search
     web_results = "Search unavailable."
@@ -111,7 +111,7 @@ Rules:
         raw = await web_search_tools.ainvoke({
             "query":smart_query
         })
-        print(raw)
+        
         web_results = str(raw)[:1000]
        
     except Exception as e:

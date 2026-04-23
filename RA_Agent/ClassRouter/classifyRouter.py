@@ -2,7 +2,11 @@ from Graphs.state import Agent_state
 from Config.llmConfig import get_llm
 from langchain_core.messages import AIMessage
 from langsmith import traceable
-
+from Config.logger import setup_logger
+import logging
+setup_logger()
+logger = logging.getLogger(__name__)
+# it help us to to pass the message to check the intent to classified by the llm
 INTENTS = {
     "greeting":             "User says hi, hello, hey, or any casual opener.",
     "thanking":             "User says thanks, thank you, or shows appreciation.",
@@ -72,12 +76,11 @@ def intent_classifier_node(state: Agent_state) -> dict:
     # Clean + validate LLM output — fallback to general_chat if unrecognized
     raw    = response.content.strip().lower().strip("`\"' ")
     intent = raw if raw in INTENTS else "general_chat"
-    print(f"[INTENT] message: {user_message}")
-    print(f"[INTENT] raw: {raw}")
-    print(f"[INTENT] final: {intent}")
+    logger.info("intent:",intent)
     return {"intent": intent}
-@traceable(name="router_by_intent")
 
+@traceable(name="router_by_intent")
+# this function help us to navigate which node thing it should go for it general chat thing
 def route_by_intent(state: Agent_state) -> str:
     intent = state.get("intent", "general_chat")
     return INTENT_TO_NODE.get(intent, "general_chat_node")

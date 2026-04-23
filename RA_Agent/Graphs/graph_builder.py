@@ -1,7 +1,5 @@
-# RA_Agent/Graphs/graph_builder.py
 
 from langgraph.graph import StateGraph, END
-
 from Graphs.state import Agent_state
 from ClassRouter.classifyRouter import (
     intent_classifier_node,
@@ -9,7 +7,7 @@ from ClassRouter.classifyRouter import (
     route_after_retrieval,
 )
 
-# ── Existing agents 
+#Existing agents 
 from Agents.greeting_agent import greeting_node
 from Agents.thanks_agent   import thanks_node
 from Agents.retrive_Agent  import retrieve_node
@@ -17,7 +15,7 @@ from Agents.scoring_agent  import scoring_node
 from Agents.signal_agent import signal_node
 
 
-# ── New agents different of it
+#New agents different of it
 from LLM_agent.LLMagent import (
     general_chat_node,
     resume_review_node,
@@ -35,19 +33,19 @@ def build_graph():
 
     
 
-    # Always runs first — classifies intent, writes to state
+    # Always runs first classifies intent, writes to state
     graph.add_node("intent_classifier_node",  intent_classifier_node)
 
-    # Simple nodes — no resume context needed
+    # Simple nodes  no resume context needed
     graph.add_node("greeting_node",           greeting_node)
     graph.add_node("thanks_node",             thanks_node)
     graph.add_node("general_chat_node",       general_chat_node)
 
-    # Retrieval — always runs before any specialist node
+    # Retrieval always runs before any specialist node
     graph.add_node("retrieval_node",          retrieve_node)
  
 
-    # Specialist nodes — receive retrieved_text from retrieval_node
+    # Specialist nodes receive retrieved_text from retrieval_node
     graph.add_node("resume_review_node", resume_review_node)
     graph.add_node("career_advice_node", career_advice_node)
     graph.add_node("cover_letter_node", cover_letter_node)

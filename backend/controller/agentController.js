@@ -36,7 +36,7 @@ console.log(resumeId)
 
         for await (const chunk of pyDataSend({ userId, content, resumeId })) {
             res.write(chunk)
-            console.log("agentReply:", chunk)
+           
         }
 
         console.log("streaming completed")

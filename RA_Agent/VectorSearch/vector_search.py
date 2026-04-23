@@ -1,6 +1,9 @@
 from bson import ObjectId
 from Db.pyDb import embedding_db
-
+from Config.logger import setup_logger
+import logging
+setup_logger()
+logger = logging.getLogger(__name__)
 def vector_search_resume(userid:ObjectId,
                          query_embedding:list[float],
                         resume_id:ObjectId,
@@ -27,7 +30,7 @@ def vector_search_resume(userid:ObjectId,
             }
         }
     ]
-
+    logger.info("retriving the query from it")
     results = list(embedding_db.aggregate(pipeline))
     return results
     
