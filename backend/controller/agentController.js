@@ -4,7 +4,9 @@ import { pyDataSend } from "./pyDataSend.js"
 
 export const agentController = async (req, res) => {
     const { userId, content, resumeId } = req.body
-console.log(resumeId)
+/* taking the parameter of userinfo and the resumeid and pass to the python function
+and get the info from it and send back to the frontend */
+
     try {
         
         if (!userId) {
