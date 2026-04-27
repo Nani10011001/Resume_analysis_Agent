@@ -18,4 +18,4 @@ COPY . .
 
 EXPOSE 7001
 
-CMD ["poetry", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "6000"]
+CMD sh -c "poetry run python MCP/Job_search_mcp.py & poetry run uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} & wait"
