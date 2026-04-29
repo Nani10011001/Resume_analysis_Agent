@@ -21,6 +21,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+@app.get("/")
+def health():
+    return {"status": "ok"}
 app.include_router(chatAgentRouter)
 app.include_router(fileAgentRouter)
 
