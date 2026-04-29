@@ -70,7 +70,7 @@ def build_graph():
     # Step 5: Full analysis pipeline edges
   
 
-    # Step 6: Specialist nodes → END 
+    # Step 6: Specialist nodes END 
  
     graph.add_edge("signal_node","scoring_node")
     graph.add_edge("scoring_node","resume_review_node")

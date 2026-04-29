@@ -2,7 +2,7 @@ from bson import ObjectId
 import hashlib
 from Graphs.state import Agent_state
 from VectorSearch.vector_search import vector_search_resume
-from Config.EmbConfig import embedding
+from Config.EmbConfig import get_embedding
 from langchain_core.runnables import RunnableParallel,RunnableLambda
 from DbSearch.nlp_search import get_nlp_info
 from langsmith import traceable
@@ -31,6 +31,7 @@ def retrieve_node(state: Agent_state):
         }
     user_id=safe_object_id(user_id_str)
     resume_id = safe_object_id(resume_id_str)
+    embedding = get_embedding()
     query_embedding = embedding.embed_query(query)
 
     

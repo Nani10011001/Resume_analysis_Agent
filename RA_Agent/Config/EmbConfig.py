@@ -1,4 +1,3 @@
-
 from functools import lru_cache
 from langchain_huggingface import HuggingFaceEmbeddings
 @lru_cache(maxsize=1)
@@ -11,5 +10,3 @@ def get_embedding():
         raise RuntimeError(f"Embedding config error: {e}")  
 
 
-# Singleton instance — import this everywhere
-embedding = get_embedding()
