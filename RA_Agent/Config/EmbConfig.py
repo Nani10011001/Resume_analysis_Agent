@@ -5,7 +5,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 def get_embedding():
     try:
         return HuggingFaceEmbeddings(
-            model_name="BAAI/bge-base-en-v1.5"
+            model_name="BAAI/bge-small-en-v1.5"
         )
     except Exception as e:
         raise RuntimeError(f"Embedding config error: {e}")  

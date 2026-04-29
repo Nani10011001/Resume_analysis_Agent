@@ -1,4 +1,6 @@
 # RA_Agent/Agents/new_agents.py
+import os
+from dotenv import load_dotenv
 from langsmith import traceable
 from langchain_core.messages import AIMessage
 from Graphs.state import Agent_state
@@ -66,10 +68,15 @@ def cover_letter_node(state: Agent_state) -> dict:
     return {"messages": [AIMessage(content=response.content)]}
 
 
+load_dotenv(os.path.join(os.path.dirname(__file__), "../.env"))
+
+# Read MCP URL from environment for flexibility in deployments
+MCP_WEBSEARCH_URL = os.environ.get("MCP_WEBSEARCH_URL", "http://localhost:8000/mcp")
+
 mcp_client = MultiServerMCPClient({
     "websearch": {
-        "url": "http://localhost:8000/mcp",   #  streamable-http
-        "transport": "streamable_http",        # ← un
+        "url": MCP_WEBSEARCH_URL,
+        "transport": "streamable_http",
     }
 })
 @traceable(name="job_search_node")

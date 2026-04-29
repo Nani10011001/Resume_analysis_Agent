@@ -1,0 +1,17 @@
+fastapi 
+uvicorn 
+gunicorn 
+pydantic 
+python-dotenv 
+pymongo 
+httpx 
+
+requests 
+langchain 
+langchain-community 
+langchain-core 
+langgraph 
+langsmith 
+langchain-groq
+ mcp 
+ fastmcp

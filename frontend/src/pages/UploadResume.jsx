@@ -28,7 +28,7 @@ const UploadResume = () => {
         formData.append("userId",userId)
     
         const {data} = await axios.post(
-          "http://localhost:7000/api/agent/upload/resume",
+          `${import.meta.env.VITE_BASE_URL}/agent/upload/resume`,
           formData,
           { withCredentials: true }
         )

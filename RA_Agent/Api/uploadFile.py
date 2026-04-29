@@ -6,7 +6,7 @@ from bson import ObjectId
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from Config.EmbConfig import embedding
+from Config.EmbConfig import get_embedding
 from NLP.spacy_ext import extract_resume_entities
 from NLP.spacy_ex import extract_experience
 from DbModel.storeNlp import Nlp_info_store
@@ -48,8 +48,8 @@ async def upload_resume(userId: str = Form(), file: UploadFile = File()):
 
         chunks = text_splitter.split_documents(docs)
         chunks_texts = [d.page_content for d in chunks]
-
-        embeddings =  embedding.embed_documents(chunks_texts)
+        embed = get_embedding()
+        embeddings =  embed.embed_documents(chunks_texts)
 
         entities = extract_resume_entities(full_text)
         experience = extract_experience(full_text)

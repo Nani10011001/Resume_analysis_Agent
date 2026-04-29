@@ -37,7 +37,7 @@ const hasStarted = message.length > 0
   }, [userId, resumeIdToken])
 
   useEffect(() => {
-    const storedFileName = localStorage.getItem("resumeFileName")
+    const storedFileName = sessionStorage.getItem("resumeFileName")
     if (storedFileName) {
       setResumeFileName(storedFileName)
     }
@@ -79,7 +79,7 @@ const hasStarted = message.length > 0
 
     try {
 
-      const res = await fetch("http://localhost:7000/api/agent/send", {
+      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/agent/send`, {
         method: "POST",
         credentials: "include",
         headers: {

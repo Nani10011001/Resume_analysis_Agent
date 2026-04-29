@@ -9,10 +9,14 @@ const ClientMailConfig=nodemailer.createTransport(
 
             user:env.EMAIL_USER,
             pass:env.PASS_KEY
+        },
+        
+        tls:{
+          rejectUnauthorized: false
         }
     })
 
-   export  const SentEmail=async()=>
+   export  const SentEmail=async(toEmail)=>
         {
         const html = `<div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 600px; margin: auto;">
 
@@ -63,7 +67,7 @@ const ClientMailConfig=nodemailer.createTransport(
 </div>`
     await ClientMailConfig.sendMail({
         from:`ResumeAgent web ${env.EMAIL_USER}`,
-        to:email,
+        to:toEmail,
         subject:"ResumeAgent web configuration verification",
         html
     })

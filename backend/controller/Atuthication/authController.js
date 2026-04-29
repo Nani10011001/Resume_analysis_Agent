@@ -26,9 +26,9 @@ const userAleardyExit=await User.findOne({email})
             })
         } 
         const hashPassword=await bcrypt.hash(password,10)
-         const otp=otpGenerator()
+   
 
-    await otpSentEmail() 
+    await SentEmail(email) 
         
         const user=await User.create({
             username:username,

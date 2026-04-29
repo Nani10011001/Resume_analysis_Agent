@@ -54,7 +54,7 @@ try {
 
           {/* Upload New Link */}
           {!showResume && resumeIdToken && (
-            <Link to="/upload-resume" className='cursor-pointer  hover:bg-blue-600 hover:rounded-md hover:transition-all hover:px-3 py-1 hover:text-white'>Upload New</Link>
+            <Link to="/upload-resume" className='cursor-pointer  hover:bg-blue-600 hover:rounded-md hover:transition-all hover:px-3 py-1 text-white hover:text-white'>Upload New</Link>
           )}
 
           {/* Logout/Getstarted */}
