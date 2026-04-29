@@ -3,6 +3,9 @@ from Api.agentApi import chatAgentRouter
 from Api.uploadFile import fileAgentRouter
 from Config.logger import setup_logger
 from contextlib import asynccontextmanager
+import os
+from dotenv import load_dotenv
+load_dotenv()
 setup_logger()
 import logging
 logger = logging.getLogger(__name__)
@@ -17,7 +20,7 @@ async def lifespan(app: FastAPI):
     yield
     logger.info("App shutting down")
 if __name__ == "__main__":
-
-    uvicorn.run(app, host="0.0.0.0", port=7001)
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
    
     

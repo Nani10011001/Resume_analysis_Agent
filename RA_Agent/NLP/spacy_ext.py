@@ -1,6 +1,13 @@
 import spacy
 import re
-nlp =spacy.load("en_core_web_sm")
+nlp = None
+
+def get_nlp():
+    global nlp
+    if nlp is None:
+        
+        nlp = spacy.load("en_core_web_sm")
+    return nlp
 Year_regex=re.compile(r"\b(19\d{2}|20\d{2})\b")
 Skill_Blacklist={
    "Python", "JavaScript", "SQL", "MongoDB",
@@ -8,6 +15,7 @@ Skill_Blacklist={
 }
 # extraction information from the pdf resume content
 def extract_resume_entities(text: str)->dict:
+    nlp = get_nlp()
     doc= nlp(text)
     name=None
     companies=set()
