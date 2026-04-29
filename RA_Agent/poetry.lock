@@ -1014,21 +1014,6 @@ dnspython = ">=2.0.0"
 idna = ">=2.0.0"
 
 [[package]]
-name = "en_core_web_md"
-version = "3.8.0"
-description = "English pipeline optimized for CPU. Components: tok2vec, tagger, parser, senter, ner, attribute_ruler, lemmatizer."
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "en_core_web_md-3.8.0.tar.gz", hash = "sha256:504fe70715dca9464bf11e385fbe80e92ae127394df3f9c45242926082425551"},
-]
-
-[package.source]
-type = "url"
-url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.8.0/en_core_web_md-3.8.0.tar.gz"
-
-[[package]]
 name = "exa-py"
 version = "2.12.0"
 description = "Python SDK for Exa API."
@@ -6578,4 +6563,4 @@ cffi = ["cffi (>=1.17,<2.0) ; platform_python_implementation != \"PyPy\" and pyt
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.15"
-content-hash = "3c746558d081153cd1cd7071f3be98e5ee7827352c1adab6b198a80acbff049d"
+content-hash = "21b707f4a94294f34ab376f73c1fc03d08201ff6fbed186edea968a1844dbd9b"
