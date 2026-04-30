@@ -63,11 +63,11 @@ export const agentFileController = async (req, res) => {
     const file = req.file
     try {
         const fileUpload = await FileController(userId, file)
-        console.log(fileUpload.resumeId)
+        console.log('upload response:', fileUpload)
 
         res.status(200).json({
             success: true,
-            resumeId: fileUpload.resume_id  
+            resumeId: fileUpload.resume_id || fileUpload.resumeId || null
         })
 
     } catch (error) {

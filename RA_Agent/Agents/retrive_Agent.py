@@ -6,6 +6,9 @@ from Config.EmbConfig import get_embedding
 from langchain_core.runnables import RunnableParallel,RunnableLambda
 from DbSearch.nlp_search import get_nlp_info
 from langsmith import traceable
+from dotenv import load_dotenv
+import os
+load_dotenv()
 def safe_object_id(value: str) -> ObjectId:
 
     try:
@@ -32,7 +35,9 @@ def retrieve_node(state: Agent_state):
     user_id=safe_object_id(user_id_str)
     resume_id = safe_object_id(resume_id_str)
     embedding = get_embedding()
-    query_embedding = embedding.embed_query(query)
+    model_name = os.environ["EMBEDDING_NAME"]
+    query_embedding = embedding.feature_extraction(query,model=model_name)
+    embeddings_data = query_embedding.tolist()
 
     
 
@@ -42,7 +47,7 @@ def retrieve_node(state: Agent_state):
             lambda _:"\n".join(r["text"] for r in vector_search_resume(
                  userid=user_id,
         resume_id=resume_id,
-        query_embedding=query_embedding
+        query_embedding=embeddings_data
             ))
         ),
         full_text=RunnableLambda(

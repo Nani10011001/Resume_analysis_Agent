@@ -12,7 +12,7 @@ export async function* pyDataSend({userId,content,resumeId}){
 
     }
     try {
-        const res=await fetch("http://localhost:7001/chat",{
+        const res=await fetch("http://localhost:10000/chat",{
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify(
@@ -42,7 +42,7 @@ export async function* pyDataSend({userId,content,resumeId}){
     if(done) break
     const decoded=decoder.decode(value,{stream:true})
     yield decoded
-    console.log("decode python data response",decoded)
+    
  }
     } catch (error) {
         console.error("FastAPI connection error - Full details:", {

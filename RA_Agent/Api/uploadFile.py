@@ -5,7 +5,6 @@ from fastapi import HTTPException, Form, UploadFile, File
 from bson import ObjectId
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-
 from Config.EmbConfig import get_embedding
 from NLP.spacy_ext import extract_resume_entities
 from NLP.spacy_ex import extract_experience
@@ -13,7 +12,8 @@ from DbModel.storeNlp import Nlp_info_store
 from DbModel.storeEmb import store_embedding
 from Agents.retrive_Agent import safe_object_id
 from fastapi import FastAPI,APIRouter
-
+from dotenv import load_dotenv
+load_dotenv()
 fileAgentRouter=APIRouter()
 
 
@@ -48,8 +48,16 @@ async def upload_resume(userId: str = Form(), file: UploadFile = File()):
 
         chunks = text_splitter.split_documents(docs)
         chunks_texts = [d.page_content for d in chunks]
-        embed = get_embedding()
-        embeddings =  embed.embed_documents(chunks_texts)
+        
+        try:
+             embedding_client = get_embedding()
+             model_name = os.environ["EMBEDDING_NAME"]
+             # Correct call: model first, then inputs
+             embeddings = embedding_client.feature_extraction(chunks_texts,model=model_name)
+             embedding_data =embeddings.tolist()
+        except Exception as e:
+            # surface clearer error to client and log
+            raise HTTPException(status_code=500, detail={"error": "embedding_failed", "reason": str(e)})
 
         entities = extract_resume_entities(full_text)
         experience = extract_experience(full_text)
@@ -66,7 +74,7 @@ async def upload_resume(userId: str = Form(), file: UploadFile = File()):
             user_id=user_object_id,
             resume_id=resume_id,
             text=chunks,
-            embeddings=embeddings
+            embeddings=embedding_data
         )
 
         return {"resume_id": str(resume_id)}

@@ -9,7 +9,7 @@ class ResumeEmbedding(BaseModel):
     resume_id:ObjectId
     text:str =Field(min_length=1)
     metadata:Dict[str,Any] =Field()
-    embedding:List[float]=Field(min_length=768,max_length=768)
+    embedding:List[float]=Field(min_length=384,max_length=384)
     source: str =Field(default="pdf")
 
     created_at:datetime

@@ -71,7 +71,7 @@ def cover_letter_node(state: Agent_state) -> dict:
 load_dotenv(os.path.join(os.path.dirname(__file__), "../.env"))
 
 # Read MCP URL from environment for flexibility in deployments
-MCP_WEBSEARCH_URL = os.environ.get("MCP_WEBSEARCH_URL", "http://localhost:8000/mcp")
+MCP_WEBSEARCH_URL = os.environ.get("MCP_WEBSEARCH_URL", "http://localhost:10000/mcp")
 
 mcp_client = MultiServerMCPClient({
     "websearch": {
@@ -88,7 +88,7 @@ async def job_search_node(state: Agent_state) -> dict:
     if not retrieved_text.strip():
         retrieved_text = "No resume uploaded yet. Give general job search advice."
 
-    # ── 1. Extract smart query FROM resume ────────────────────────────────────
+    # Extract smart query FROM resume
     extraction = llm.invoke([
     SystemMessage(content="""Extract a job search query from this resume.
 Return ONLY a short string like:
@@ -100,12 +100,12 @@ Rules:
     HumanMessage(content=f"Resume:\n{retrieved_text}\nUser asked: {user_message}")
 ])
 
- # → "Senior Architect New York job opening"
+ # "Senior Architect New York job opening"
     
     smart_query = extraction.content.strip()
-    # → "Senior Architect NYC 10 years"
+    # "Senior Architect NYC 10 years"
 
-    # ── 2. Use smart query for MCP search
+    # Use smart query for MCP search
     web_results = "Search unavailable."
     try:
         tools = await mcp_client.get_tools()
