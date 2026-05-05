@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 import logging
 import uvicorn
-
+from fastapi.middleware.cors import CORSMiddleware
 load_dotenv()
 setup_logger()
 
@@ -20,7 +20,14 @@ async def lifespan(app: FastAPI):
     logger.info("App shutting down")
 
 app = FastAPI(lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],   later restrict
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 
+)
 @app.get("/")
 def health():
     return {"status": "ok"}
