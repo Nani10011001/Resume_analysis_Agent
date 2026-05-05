@@ -71,7 +71,7 @@ def cover_letter_node(state: Agent_state) -> dict:
 load_dotenv(os.path.join(os.path.dirname(__file__), "../.env"))
 
 # Read MCP URL from environment for flexibility in deployments
-MCP_WEBSEARCH_URL = os.environ.get("MCP_WEBSEARCH_URL", "http://localhost:10000/mcp")
+MCP_WEBSEARCH_URL = os.environ.get("MCP_WEBSEARCH_URL")
 
 mcp_client = MultiServerMCPClient({
     "websearch": {
