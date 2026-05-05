@@ -89,7 +89,8 @@ const hasStarted = message.length > 0
           userId: userId,
           content: user.text,
           resumeId: resumeIdToken
-        })
+        }),
+        credentials: "include"
       })
       
 

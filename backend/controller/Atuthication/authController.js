@@ -44,7 +44,7 @@ const userAleardyExit=await User.findOne({email})
         res.cookie("token",jwtToken,{
             httpOnly:true,
             secure: env.NODE_ENV === "production",
-            sameSite: env.NODE_ENV === "production" ? "strict" : "lax",
+            sameSite: env.NODE_ENV === "production" ? "None" : "lax",
             maxAge:7*24*60*60*1000
       
         })
@@ -124,7 +124,7 @@ export const Login=async(req,res)=>{
         res.cookie("token",jwtToken,{
             httpOnly:true,
             secure: env.NODE_ENV === "production",
-            sameSite: env.NODE_ENV === "production" ? "strict" : "lax",
+            sameSite: env.NODE_ENV === "production" ? "None" : "lax",
             maxAge:7*24*60*60*1000
         })
         

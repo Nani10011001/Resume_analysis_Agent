@@ -13,6 +13,7 @@ app.use(cors({
   credentials: true,
   origin: process.env.FRONTEND_URL
 }))
+app.options("*", cors());
 app.use(express.json())
 app.use(cookieParser())
 app.use("/api",router)
