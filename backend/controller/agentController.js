@@ -31,7 +31,7 @@ and get the info from it and send back to the frontend */
         }
 
 
-        res.setHeader("Content-Type", "text/plain")
+        res.setHeader("Content-Type", "text/event-stream")
         res.setHeader("Cache-Control", "no-cache")
         res.setHeader("Connection", "keep-alive")
         res.flushHeaders?.()   
