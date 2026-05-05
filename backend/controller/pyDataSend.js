@@ -33,17 +33,15 @@ export async function* pyDataSend({userId,content,resumeId}){
       const text = await res.text()
       throw new Error(`fastapi returned ${res.status}: ${text}`)
     }
- const reader=res.body.getReader()
- const decoder=new TextDecoder()
- while(true){
+const reader = res.body.getReader()
+const decoder = new TextDecoder()
 
-    const {value,done}=await reader.read()
-
-    if(done) break
-    const decoded=decoder.decode(value,{stream:true})
-    yield decoded
-    
- }
+while(true){
+  const {value,done}=await reader.read()
+  if(done) break
+  const decoded=decoder.decode(value,{stream:true})
+  yield decoded
+}
     } catch (error) {
         console.error("FastAPI connection error - Full details:", {
             message: error.message,

@@ -9,10 +9,24 @@ import AgentRouter from "./router/agentRouter/Agentrouter.js"
 import { redisConnect } from "./DB/Redis/redisConnection.js"
 const app=express()
 
+const allowedOrigins = [
+  process.env.FRONTEND_URL, 
+];
 app.use(cors({
-  credentials: true,
-  origin: process.env.FRONTEND_URL
-}))
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.endsWith(".vercel.app") // dev support
+    ) {
+      return callback(null, true);
+    }
+
+    callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true
+}));
 
 app.use(express.json())
 app.use(cookieParser())
