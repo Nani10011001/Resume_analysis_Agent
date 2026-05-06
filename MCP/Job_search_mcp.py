@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 from fastmcp import FastMCP
 from langsmith import traceable
 from exa_py import Exa
-
-load_dotenv(os.path.join(os.path.dirname(__file__), "../.env"))
+import threading
+load_dotenv(os.path.join(os.path.dirname(__file__), "./.env"))
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("websearch-mcp")

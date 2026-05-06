@@ -1,0 +1,4 @@
+fastmcp
+exa_py
+langsmith
+python-dotenv
