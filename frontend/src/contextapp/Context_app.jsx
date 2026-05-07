@@ -56,6 +56,7 @@ setResumeIdToken,
 isLodingAUth,
 CheckAuthication,
 jwtToken,
+setJwtToken,
 resumeSessionActive,
 setResumeSessionActive
    }

@@ -6,7 +6,7 @@ import toast from "react-hot-toast"
 
 const NavBar = ({ resumeFileName, onRemoveResume = null, showResume = false }) => {
   const {isLodingAUth,
-CheckAuthication,axios,jwtToken,navigate,resumeIdToken,setResumeIdToken}=useAppcontext()
+CheckAuthication,axios,jwtToken,navigate,resumeIdToken,setResumeIdToken,setJwtToken}=useAppcontext()
  
  const logout=async()=>{
 try {
@@ -15,8 +15,10 @@ try {
     await CheckAuthication()
     sessionStorage.removeItem("resumId")
     setResumeIdToken("")
+    setJwtToken("")
     localStorage.removeItem("token")
     sessionStorage.removeItem("resumeFileName")
+    
     navigate("/")
     return toast.success("logout successfull")
   }
