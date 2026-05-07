@@ -147,7 +147,11 @@ export const Login=async(req,res)=>{
 }
 export const logout=(req,res)=>{
  try {
-    res.clearCookie("token")
+    res.clearCookie("token", {
+      httpOnly: true,
+       secure: env.NODE_ENV === "production",
+      sameSite: env.NODE_ENV === "production" ? "None" : "lax",
+    })
     return res.status(202).json({
         success:true,
         message:"logout successfull"
