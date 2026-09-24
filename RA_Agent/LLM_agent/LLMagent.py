@@ -126,7 +126,7 @@ Rules:
         web_results = f"Search unavailable: {e}"
 
     # ── 3. Pass everything to prompt ──────────────────────────────────────────
-    response = llm.invoke(jobSearchPrompt(user_message, retrieved_text, web_results))
+    response = llm.invoke(jobSearchPrompt(user_message, retrieved_text, web_results=web_results))
     return {"messages": [AIMessage(content=response.content)]}
 
 #interviw preparation

@@ -3,5 +3,6 @@
     "python-envs.defaultPackageManager": "ms-python.python:poetry",
     "chat.mcp.serverSampling": {
         
-    }
+    },
+    "workbench.colorTheme": "Dark 2026"
 }

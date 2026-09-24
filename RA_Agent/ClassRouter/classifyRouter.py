@@ -76,7 +76,8 @@ def intent_classifier_node(state: Agent_state) -> dict:
     # Clean + validate LLM output — fallback to general_chat if unrecognized
     raw    = response.content.strip().lower().strip("`\"' ")
     intent = raw if raw in INTENTS else "general_chat"
-    logger.info("intent:",intent)
+    logger.info(f"intent: {intent}")
+    print("intent_data: ",intent)
     return {"intent": intent}
 
 @traceable(name="router_by_intent")

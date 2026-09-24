@@ -19,5 +19,5 @@ WORKDIR /usr/share/nginx/html
 # Copy built files from stage 1
 COPY --from=build /frontend-resume-agent/dist .
 
-EXPOSE 3000
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

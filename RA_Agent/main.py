@@ -20,7 +20,7 @@ async def lifespan(app: FastAPI):
     logger.info("App shutting down")
 
 app = FastAPI(lifespan=lifespan)
-Backend_url = os.environ["BACKEND_URL"]
+Backend_url = os.environ.get("BACKEND_URL", "http://localhost:3000")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[Backend_url],  

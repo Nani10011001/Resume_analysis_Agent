@@ -9,6 +9,8 @@ from langsmith import traceable
 from dotenv import load_dotenv
 import os
 load_dotenv()
+import logging
+logger = logging.getLogger(__name__)
 def safe_object_id(value: str) -> ObjectId:
 
     try:
@@ -25,9 +27,11 @@ def safe_object_id(value: str) -> ObjectId:
 def retrieve_node(state: Agent_state):
     query = state["messages"][-1].content
     user_id_str = state["userId"]
-    resume_id_str = state.get("resume_id", "")  
+    resume_id_str = state.get("resume_id")  
+    
     # guard first before any conversion
     if not resume_id_str or resume_id_str.strip() == "":
+        print("---no resume id str---")
         return {
             "retrieved_text": "No resume uploaded yet. Give general advice.",
             "full_text": ""
@@ -60,7 +64,8 @@ def retrieve_node(state: Agent_state):
     )
 
 
-    results = parallel_fetch.invoke({})
-    
+    results = parallel_fetch.invoke({}) 
+   
+
     return {"retrieved_text": results["retrieved_text"],
             "full_text":results["full_text"]}

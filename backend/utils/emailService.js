@@ -44,7 +44,7 @@ const ClientMailConfig=nodemailer.createTransport(
   </p>
 
   <div style="text-align: center; margin: 20px 0;">
-    <a href="#" style="background-color: #075e54; color: #fff; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+    <a href="https://resume-analysis-agent-psi.vercel.app" style="background-color: #075e54; color: #fff; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
       Get Started
     </a>
   </div>

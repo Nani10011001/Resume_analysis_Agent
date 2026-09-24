@@ -20,6 +20,6 @@ RUN python -m spacy download en_core_web_sm
 # Copy the rest of the code
 COPY . .
 
-EXPOSE 10000
+EXPOSE 8000
 
 CMD poetry run uvicorn main:app --host 0.0.0.0 --port ${PORT:-10000}

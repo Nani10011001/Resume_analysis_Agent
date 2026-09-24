@@ -90,7 +90,7 @@ const hasStarted = message.length > 0
           content: user.text,
           resumeId: resumeIdToken
         }),
-        credentials: "include"
+       
       })
       
 
@@ -125,7 +125,7 @@ const hasStarted = message.length > 0
         role: "ai",
         text: fullChunk
       }
-
+console.log(JSON.stringify(fullChunk))
       setMessage((prev) => [...prev, aiMessage])
 
       setStreamResponse("")
@@ -160,6 +160,73 @@ const hasStarted = message.length > 0
     }
 
   }
+  const normalizeMarkdown = (text) => {
+  if (!text) return ""
+
+  return text
+    // Convert literal \n into real newlines if they exist
+    .replace(/\\n/g, "\n")
+
+    // Put headings on their own line
+    .replace(/\s+(#{2,3}\s+)/g, "\n\n$1")
+
+    // Separate markdown table rows
+    .replace(/\|\s+\|/g, "|\n|")
+
+    // Separate horizontal rules from following headings
+    .replace(/---\s+(#{2,3}\s+)/g, "---\n\n$1")
+}
+  const MarkdownRenderer = ({ content }) => (
+  <ReactMarkdown
+    remarkPlugins={[remarkGfm]}
+    components={{
+      table: ({ children }) => (
+        <div className="overflow-x-auto my-4">
+          <table className="w-full border-collapse border border-gray-600 text-sm">
+            {children}
+          </table>
+        </div>
+      ),
+
+      th: ({ children }) => (
+        <th className="border border-gray-600 px-4 py-3 text-left font-semibold">
+          {children}
+        </th>
+      ),
+
+      td: ({ children }) => (
+        <td className="border border-gray-600 px-4 py-3 align-top">
+          {children}
+        </td>
+      ),
+
+      a: ({ href, children }) => (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-400 hover:text-blue-300 hover:underline"
+        >
+          {children}
+        </a>
+      ),
+
+      h3: ({ children }) => (
+        <h3 className="text-xl font-bold mt-6 mb-3">
+          {children}
+        </h3>
+      ),
+
+      p: ({ children }) => (
+        <p className="mb-3 leading-7">
+          {children}
+        </p>
+      ),
+    }}
+  >
+    {normalizeMarkdown(content)}
+  </ReactMarkdown>
+)
 
   return (
     <div className="flex flex-col h-screen bg-[radial-gradient(ellipse_at_top_left,_#1a0533_0%,_#0d0d0d_60%)] text-black">
@@ -255,9 +322,7 @@ const hasStarted = message.length > 0
         >
 
           {msg.role === "ai" ? (
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {msg.text}
-            </ReactMarkdown>
+           <MarkdownRenderer content={msg.text} />
           ) : (
             msg.text
           )}
@@ -272,9 +337,7 @@ const hasStarted = message.length > 0
       <div className="flex items-start gap-3">
         <Sparkles size={20} className="text-blue-500 mt-1" />
         <div className=" border rounded-xl px-6 py-4 max-w-2xl  text-white shadow-sm">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {streamResponse}
-          </ReactMarkdown>
+         <MarkdownRenderer content={streamResponse} />
         </div>
       </div>
     )}
