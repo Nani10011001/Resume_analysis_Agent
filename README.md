@@ -69,56 +69,8 @@ Interview Preparation Agent
 ---
 
 # 🏗️ Architecture
+<img width="6919" height="5320" alt="Untitled diagram-2026-11-04-125522" src="https://github.com/user-attachments/assets/d0a091bf-a279-494f-9377-bf31205687e0" />
 
-```text
-                       ┌──────────────────────┐
-                       │      React UI        │
-                       │   Vite + Tailwind    │
-                       └──────────┬───────────┘
-                                  │
-                         HTTP / SSE Requests
-                                  │
-                                  ▼
-                       ┌──────────────────────┐
-                       │   Express Backend   │
-                       │      Node.js        │
-                       │                      │
-                       │ • Authentication    │
-                       │ • Resume Upload     │
-                       │ • Rate Limiting     │
-                       │ • API Routing       │
-                       └──────────┬───────────┘
-                                  │
-                         Internal API Request
-                                  │
-                                  ▼
-                 ┌────────────────────────────────┐
-                 │      FastAPI AI Service         │
-                 │                                │
-                 │          LangGraph             │
-                 │                                │
-                 │  Intent Classification         │
-                 │          ↓                     │
-                 │  Retrieval / NLP               │
-                 │          ↓                     │
-                 │  Specialist Agent              │
-                 └──────────────┬─────────────────┘
-                                │
-             ┌──────────────────┼────────────────────┐
-             │                  │                    │
-             ▼                  ▼                    ▼
-      ┌─────────────┐   ┌───────────────┐   ┌──────────────┐
-      │ NLP / spaCy │   │ MongoDB       │   │ LLM          │
-      │             │   │ Vector Search │   │ Groq         │
-      └─────────────┘   └───────────────┘   └──────────────┘
-                                │
-                                │
-                                ▼
-                       ┌─────────────────┐
-                       │ MCP Job Search  │
-                       │ FastMCP + Exa   │
-                       └─────────────────┘
-```
 
 ---
 
