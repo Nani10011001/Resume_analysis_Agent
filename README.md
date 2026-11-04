@@ -69,8 +69,10 @@ Interview Preparation Agent
 ---
 
 # 🏗️ Architecture
-<img width="6919" height="5320" alt="Untitled diagram-2026-11-04-125522" src="https://github.com/user-attachments/assets/d0a091bf-a279-494f-9377-bf31205687e0" />
 
+
+
+<img width="3217" height="4680" alt="resumeAgent-Architeture-diagram" src="https://github.com/user-attachments/assets/7930b800-9b06-4c48-903a-52a5351dbe85" />
 
 ---
 
