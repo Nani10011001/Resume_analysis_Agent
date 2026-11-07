@@ -13,10 +13,9 @@ export const authMiddleware=async(req,res,next)=>{
        
     try{
      
-            const jwtVerifyDecode=jwt.verify(token,env.JWT_SECRETE)
-        req.userId=jwtVerifyDecode
-        console.log(req.user)
-        next()
+        const jwtVerifyDecode=jwt.verify(token,env.JWT_SECRETE)
+    req.userId=jwtVerifyDecode
+    next()
     }
     catch(error){
 console.error(error)

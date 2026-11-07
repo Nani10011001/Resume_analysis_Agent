@@ -29,7 +29,7 @@ export const FileController = async (userId, file) => {
     formData.append("userId", userId);
 
     
-    const targetUrl = `${process.env.AGENT_URL}/upload-resume`
+    const targetUrl = `${env.FASTAPI_URL}/upload-resume`
 
     console.log("Uploading to:", targetUrl);
 

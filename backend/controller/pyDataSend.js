@@ -12,7 +12,7 @@ export async function* pyDataSend({userId,content,resumeId}){
 
     }
     try {
-        const res=await fetch(`${process.env.AGENT_URL}/chat`,{
+        const res=await fetch(`${env.FASTAPI_URL}/chat`,{
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify(
