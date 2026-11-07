@@ -64,7 +64,17 @@ export const agentFileController = async (req, res) => {
     try {
         const fileUpload = await FileController(userId, file)
         console.log('upload response:', fileUpload)
+        
+const resumeId = fileUpload?.resume_id ?? fileUpload?.resumeId;
 
+if (!resumeId) {
+    console.error("Resume ID missing from FastAPI response");
+    return res.status(502).json({
+        success: false,
+        message: "FastAPI did not return a resume ID",
+        data: fileUpload
+    });
+}
         res.status(200).json({
             success: true,
             resumeId: fileUpload.resume_id || fileUpload.resumeId || null
