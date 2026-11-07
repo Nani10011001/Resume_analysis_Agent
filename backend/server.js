@@ -31,6 +31,11 @@ app.use(cors({
 
 app.use(express.json())
 app.use(cookieParser())
+app.get("/",(req,res)=>{
+  res.json({
+    message:"hello your website is working fine"
+  })
+})
 app.use("/api",router)
 app.use("/api/agent",AgentRouter)
 const serverStart=async()=>{
