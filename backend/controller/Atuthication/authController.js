@@ -105,13 +105,13 @@ export const Login=async(req,res)=>{
             })
         }
         const user=await User.findOne({email})
-        const userId=user._id
         if(!user){
             return res.status(400).json({
                 success:false,
                 message:"user does not exist"
             })
         }
+        const userId=user._id
         const MatchPassword= await bcrypt.compare(password,user.password)
         if(!MatchPassword){
             return res.status(400).json({
