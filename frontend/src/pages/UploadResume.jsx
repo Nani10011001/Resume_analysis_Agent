@@ -8,11 +8,20 @@ import axios from 'axios'
 const UploadResume = () => {
   const [pdf,setPdf]=useState(null)
   const [loading,setLoading]=useState(false)
-  const {navigate,userId, setResumeIdToken}=useAppcontext()
+  const {navigate,userId, setResumeIdToken,jwtToken,isLodingAUth}=useAppcontext()
+
+  useEffect(() => {
+    if (!isLodingAUth && !jwtToken) {
+      navigate("/login", { replace: true })
+    }
+  }, [isLodingAUth, jwtToken, navigate])
 
   const handelFileInput=async()=>{
 
-   
+    if (isLodingAUth || !jwtToken) {
+      navigate("/login", { replace: true })
+      return
+    }
 
     if(!pdf){
       return toast.error("please upload a resume first")
@@ -60,6 +69,11 @@ const UploadResume = () => {
   return (
     <div className='w-full min-h-[calc(100dvh-1.5rem)]'>
      <NavBar/>
+     {isLodingAUth || !jwtToken ? (
+       <div className='flex min-h-[calc(100dvh-6rem)] items-center justify-center'>
+         <Loader className='h-6 w-6 animate-spin' aria-label="Checking authentication" />
+       </div>
+     ) : (
      <div className='flex justify-center min-h-[calc(100dvh-6rem)] items-center px-1 py-8'>
         <div className='w-full max-w-xl'>
             <div><p className='font-bold text-2xl text-center'>Upload Your Resume</p>
@@ -108,6 +122,7 @@ const UploadResume = () => {
             
         </div>
      </div>
+     )}
     </div>
   )
 }

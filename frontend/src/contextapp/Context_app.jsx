@@ -19,7 +19,7 @@ const [resumeIdToken, setResumeIdToken] = useState(() => {
     return storedResumeId && storedUserId === userId ? storedResumeId : ""
   })
 
-      const [isLodingAUth,setIsLoadingAuth]=useState(false)
+      const [isLodingAUth,setIsLoadingAuth]=useState(true)
       const [jwtToken,setJwtToken]=useState("")
       const [resumeSessionActive, setResumeSessionActive] = useState(false)
 
@@ -34,16 +34,18 @@ const [resumeIdToken, setResumeIdToken] = useState(() => {
      }, [userId])
 
      const CheckAuthication=async()=>{
+      setIsLoadingAuth(true)
       try {
         const {data}=await axios.get("/auth-status")
         if(data.success){
-setIsLoadingAuth(false)
 setJwtToken(data.userId)
-
+        } else {
+          setJwtToken(null)
         }
       } catch (error) {
-        setIsLoadingAuth(false)
         setJwtToken(null)
+      } finally {
+        setIsLoadingAuth(false)
       }
      }
   
