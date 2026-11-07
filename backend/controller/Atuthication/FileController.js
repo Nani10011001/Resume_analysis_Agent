@@ -33,20 +33,25 @@ export const FileController = async (userId, file) => {
 
     console.log("Uploading to:", targetUrl);
 
-    const response = await axios.post(targetUrl, formData, {
-      headers: formData.getHeaders(),
-      httpsAgent: agent,
-      timeout: 120000,
-    });
+    console.log("Calling FastAPI:", targetUrl);
 
+const response = await axios.post(targetUrl, formData, {
+    headers: formData.getHeaders(),
+    timeout: 120000,
+});
+
+console.log("FastAPI status:", response.status);
+console.log("FastAPI response:", response.data);
     return response.data;
   } catch (error) {
-    console.error("file upload error - details:", {
-      message: error.message,
-      stack: error.stack,
-      responseStatus: error.response?.status,
-      responseData: error.response?.data,
-    });
+    console.error("FastAPI request failed:", {
+    message: error.message,
+    status: error.response?.status,
+    data: typeof error.response?.data === "string"
+        ? error.response.data.slice(0, 500)
+        : error.response?.data,
+    code: error.code
+});
     throw new Error(`File upload failed: ${error.message}`);
   }
 };
