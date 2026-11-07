@@ -39,9 +39,10 @@ def retrieve_node(state: Agent_state):
     user_id=safe_object_id(user_id_str)
     resume_id = safe_object_id(resume_id_str)
     embedding = get_embedding()
-    model_name = os.environ["EMBEDDING_NAME"]
-    query_embedding = embedding.feature_extraction(query,model=model_name)
-    embeddings_data = query_embedding.tolist()
+ 
+    query_embedding = embedding.embed_query(query)
+    embeddings_data = query_embedding
+    print(embeddings_data)
 
     
 
@@ -65,7 +66,7 @@ def retrieve_node(state: Agent_state):
 
 
     results = parallel_fetch.invoke({}) 
-   
+    print("retrived context",results["retrieved_text"])
 
     return {"retrieved_text": results["retrieved_text"],
             "full_text":results["full_text"]}

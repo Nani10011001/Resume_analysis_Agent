@@ -36,13 +36,13 @@ def serialize_mongo(obj):
     return obj
 
 
-# Preserve Markdown formatting while streaming
-def stream_response(text: str):
+
+async def stream_response(text: str):
     chunk_size = 20
 
     for i in range(0, len(text), chunk_size):
         yield text[i:i + chunk_size]
-        asyncio.sleep(0.02)
+        await asyncio.sleep(0.05)
 
 
 chatAgentRouter = APIRouter()

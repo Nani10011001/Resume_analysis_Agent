@@ -51,10 +51,10 @@ async def upload_resume(userId: str = Form(), file: UploadFile = File()):
         
         try:
              embedding_client = get_embedding()
-             model_name = os.environ["EMBEDDING_NAME"]
-             # Correct call: model first, then inputs
-             embeddings = embedding_client.feature_extraction(chunks_texts,model=model_name)
-             embedding_data =embeddings.tolist()
+             
+             # Correct call model first, then inputs
+             embeddings = embedding_client.embed_documents(chunks_texts)
+             embedding_data =embeddings
         except Exception as e:
             # surface clearer error to client and log
             raise HTTPException(status_code=500, detail={"error": "embedding_failed", "reason": str(e)})

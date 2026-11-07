@@ -18,13 +18,13 @@ mcp = FastMCP("websearch")
 
 @traceable(name="job_mcp")
 @mcp.tool()
-async def web_search(query: str) -> str:      # ← renamed from webMcp
+async def web_search(query: str) -> str:      
     """Search for job listings and return direct links."""
     logger.info(f"Searching: {query}")
     try:
         client_exa = Exa(api_key=EXA_API_KEY)
 
-        results = client_exa.search_and_contents(  # ← not .answer()
+        results = client_exa.search_and_contents(  
             f"{query} job opening 2025",
             num_results=5,
             type="keyword",

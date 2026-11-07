@@ -36,15 +36,15 @@ const Login = () => {
       }
     }
   return (
-      <div className=' w-full h-full rounded-md flex shadow-sm shadow-black '>
-      <div className='max-w-1/2 min-h-screen p-10 flex flex-col gap-20 text-white bg-blue-600'>
+      <div className='w-full min-h-[calc(100dvh-1.5rem)] rounded-md flex flex-col md:flex-row shadow-sm shadow-black overflow-hidden'>
+      <div className='w-full md:w-1/2 md:min-h-[calc(100dvh-2.5rem)] p-6 sm:p-10 flex flex-col gap-8 sm:gap-16 md:gap-20 text-white bg-blue-600'>
 <div>       <p className='flex gap-2 items-center font-bold text-2xl'><span className='text-white'>
   <Sparkles/></span> ResumeAgent</p>
   </div>
   
- <div className='flex flex-col gap-7'>
+ <div className='flex flex-col gap-5 sm:gap-7'>
   <div>
-<h4 className='uppercase text-3xl font-bold'>Transform your resume with Ai</h4>
+<h4 className='uppercase text-2xl sm:text-3xl font-bold'>Transform your resume with AI</h4>
   </div>
    <div>
     <p>Join thousands of professionals who have improved their ATS scores and landed their dream jobs with ResumeAgent</p>
@@ -83,8 +83,8 @@ const Login = () => {
 
       </div>
 
-    <div className='w-1/2 flex justify-center  p-10   gap-20'>
-       <div className='shadow-sm shadow-black/30 w-full p-10'>
+    <div className='w-full md:w-1/2 flex justify-center items-center p-4 sm:p-8 lg:p-10'>
+       <div className='shadow-sm shadow-black/30 w-full max-w-xl p-5 sm:p-8 lg:p-10'>
   <p className='font-bold text-center text-2xl'>Welcome back</p>
   <p className='text-gray-500 my-3'>Log in to continue to your dashboard</p>
 <form action=""onSubmit={inputHandler} className=''>

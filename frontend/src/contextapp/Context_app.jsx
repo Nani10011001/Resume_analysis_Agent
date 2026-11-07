@@ -11,12 +11,28 @@ import { createContext } from 'react'
 
 export  const Context_app = ({children}) => {
     const navigate=useNavigate()
-      const userId=localStorage.getItem("token")
-const [resumeIdToken, setResumeIdToken] = useState(
-    sessionStorage.getItem("resumeId") || ""  )
+      const userId=localStorage.getItem("token") || ""
+const [resumeIdToken, setResumeIdToken] = useState(() => {
+    const storedResumeId = sessionStorage.getItem("resumeId")
+    const storedUserId = sessionStorage.getItem("resumeUserId")
+
+    return storedResumeId && storedUserId === userId ? storedResumeId : ""
+  })
+
       const [isLodingAUth,setIsLoadingAuth]=useState(false)
       const [jwtToken,setJwtToken]=useState("")
       const [resumeSessionActive, setResumeSessionActive] = useState(false)
+
+     useEffect(() => {
+       const storedResumeId = sessionStorage.getItem("resumeId")
+       const storedUserId = sessionStorage.getItem("resumeUserId")
+       if (storedResumeId && storedUserId !== userId) {
+      sessionStorage.removeItem("resumeId")
+      sessionStorage.removeItem("resumeFileName")
+      sessionStorage.removeItem("resumeUserId")
+       }
+     }, [userId])
+
      const CheckAuthication=async()=>{
       try {
         const {data}=await axios.get("/auth-status")

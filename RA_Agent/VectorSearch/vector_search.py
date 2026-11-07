@@ -17,7 +17,7 @@ def vector_search_resume(userid:ObjectId,
                 "numCandidates": 100,
                 "limit": top_k,
                 "filter": {
-                    "user_id": ObjectId(userid),
+                    "user_id": userid,
                      "resume_id":resume_id
                 }
             }

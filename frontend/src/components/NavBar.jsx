@@ -13,7 +13,8 @@ try {
   const {data}= await axios.post("/logout")
   if(data.success){
     await CheckAuthication()
-    sessionStorage.removeItem("resumId")
+    sessionStorage.removeItem("resumeId")
+    sessionStorage.removeItem("resumeUserId")
     setResumeIdToken("")
     setJwtToken("")
     localStorage.removeItem("token")
@@ -30,23 +31,24 @@ try {
 
  }
   return (
-    <div>
-      <div className='flex justify-between items-center px-4 py-3'>
-        <Link to="/" className='flex gap-1 items-center cursor-pointer'>
-         <span className='bg-blue-600 rounded-xl text-white px-1.5 py-1'> <FileText /></span>
-     <span className='font-semibold text-[20px] text-white'>ResumeAgent</span>
+    <div className="w-full">
+      <div className='flex flex-wrap justify-between items-center gap-3 px-1 py-3 sm:px-4'>
+        <Link to="/" className='flex min-w-0 gap-1 items-center cursor-pointer'>
+         <span className='shrink-0 bg-blue-600 rounded-xl text-white px-1.5 py-1'> <FileText /></span>
+     <span className='truncate font-semibold text-lg sm:text-[20px] text-white'>ResumeAgent</span>
         </Link>
 
-        <div className='flex gap-4 font-semibold items-center'>
+        <div className='flex flex-wrap justify-end gap-2 sm:gap-4 font-semibold items-center'>
           {/* Resume Tab */}
           {showResume && resumeIdToken && (
-            <div className="flex items-center gap-2 bg-blue-600 border px-3 py-1 rounded-lg">
+            <div className="flex min-w-0 max-w-[52vw] sm:max-w-xs items-center gap-2 bg-blue-600 border px-2 sm:px-3 py-1 rounded-lg">
               <FileText size={16} className="text-blue-200" />
-              <span className="text-sm font-medium text-white">{resumeFileName}</span>
+              <span className="truncate text-xs sm:text-sm font-medium text-white">{resumeFileName || "Uploaded resume"}</span>
               {onRemoveResume && (
                 <button
                   onClick={onRemoveResume}
-                  className="ml-1 text-white hover:text-gray-800 transition"
+                  aria-label="Remove resume"
+                  className="ml-1 shrink-0 text-white hover:text-gray-800 transition"
                 >
                   <X size={14} />
                 </button>

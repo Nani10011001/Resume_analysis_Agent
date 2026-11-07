@@ -19,7 +19,7 @@ app.use(cors({
 
     if (
       allowedOrigins.includes(origin) ||
-      origin.endsWith(".vercel.app") // dev support
+      origin.endsWith(".vercel.app")
     ) {
       return callback(null, true);
     }
@@ -36,9 +36,10 @@ app.use("/api/agent",AgentRouter)
 const serverStart=async()=>{
 
     try {
-        app.listen(env.PORT,()=>console.log(`server running at${process.env.PORT}`))
+
      await DatabaseConnect()
      await redisConnect()
+    app.listen(env.PORT,()=>console.log(`server running at${process.env.PORT}`))
     } catch (error) {
         console.log("server starting error",error)
         process.exit(1)

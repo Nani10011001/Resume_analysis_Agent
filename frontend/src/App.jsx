@@ -10,7 +10,7 @@ import UploadResume from './pages/UploadResume.jsx'
 
 const App = () => {
   return (
-    <div className="px-10 py-5 min-h-screen bg-[radial-gradient(ellipse_at_top_left,_#1a0533_0%,_#0d0d0d_60%)] text-white">
+    <div className="min-h-screen overflow-x-hidden bg-slate-950 px-3 py-3 text-white sm:px-5 sm:py-4 lg:px-10 lg:py-5">
       <Toaster/>
  
       <Routes>

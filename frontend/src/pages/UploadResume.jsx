@@ -32,21 +32,22 @@ const UploadResume = () => {
           formData,
           { withCredentials: true }
         )
-        console.log(data)
+        const resumeId = data?.resumeId
+        if (!data?.success || typeof resumeId !== "string" || !resumeId.trim()) {
+          throw new Error(data?.message || "Upload did not return a resume ID")
+        }
 
-        if(data?.success){
-          toast.success("File uploaded successfully")
-          sessionStorage.setItem("resumeFileName", pdf.name)
-          navigate("/chat-ui")
-        } 
-        const resumeId=data.resumeId
-        sessionStorage.setItem("resumeId",resumeId)
-     setResumeIdToken(resumeId)
+        sessionStorage.setItem("resumeFileName", pdf.name)
+        sessionStorage.setItem("resumeId", resumeId)
+        sessionStorage.setItem("resumeUserId", userId)
+        setResumeIdToken(resumeId)
+        toast.success("File uploaded successfully")
+        navigate("/chat-ui")
           
       }
        catch (error) {
         console.error("Upload error:", error)
-       return  toast.error(error.response?.data?.message || "Upload failed")
+       return  toast.error(error.response?.data?.message || error.message || "Upload failed")
       }
       finally{
         setLoading(false)
@@ -57,31 +58,31 @@ const UploadResume = () => {
   }
 
   return (
-    <div className='w-full h-full'>
+    <div className='w-full min-h-[calc(100dvh-1.5rem)]'>
      <NavBar/>
-     <div className='flex justify-center h-screen items-center'>
-        <div className=''>
+     <div className='flex justify-center min-h-[calc(100dvh-6rem)] items-center px-1 py-8'>
+        <div className='w-full max-w-xl'>
             <div><p className='font-bold text-2xl text-center'>Upload Your Resume</p>
             <p className='text-gray-500 text-sm my-3 text-center'>Upload your PDF resume to get instant ATS score analysis</p></div>
-            <div className='h-[200px] w-[500px] flex justify-center  items-center border-2 border-dashed  border-gray-400'><div className='text-center w-full'>
+            <div className='min-h-[200px] w-full flex justify-center items-center border-2 border-dashed border-gray-400 rounded-lg p-4'><div className='text-center w-full'>
             <input type="file"
          accept='application/pdf'
           onChange={(e)=>{
             console.log(e.target.files[0])
             setPdf(e.target.files[0])}}
             id='upload-data' className='hidden ' />
-            <label htmlFor="upload-data" className='flex flex-col justify-center items-center'>
+            <label htmlFor="upload-data" className='flex flex-col justify-center items-center cursor-pointer'>
               <Upload/>
               </label>
-            <p className='my-2 font-semibold text-sm'>Drop your resume here</p>
+            <p className='my-2 font-semibold text-sm'>Choose a PDF resume to upload</p>
            
            {pdf && (
 <div className='w-full flex justify-center'>
-    <div className="mt-4 flex items-center justify-be border rounded-lg p-3 w-1/3 bg-gray-50">
+    <div className="mt-4 flex min-w-0 items-center justify-between gap-3 border rounded-lg p-3 w-full max-w-sm bg-gray-50">
 
     <div className="flex items-center  gap-2">
       📄
-      <p className=" text-black text-sm font-medium">{pdf.name}</p>
+      <p className="min-w-0 truncate text-black text-sm font-medium">{pdf.name}</p>
     </div>
 
     <button
@@ -94,7 +95,7 @@ const UploadResume = () => {
   </div>
   </div>
 )}
-<div className='mt-3'><button disabled={loading}  onClick={handelFileInput} className={`  rounded-md py-2 cursor-pointer hover:scale-102  w-1/3 text-white ${loading?"cursor-not-allowed bg-blue-600 text-white":"bg-blue-600 text-sm "}`}
+<div className='mt-3 px-4'><button disabled={loading} onClick={handelFileInput} className={`rounded-md py-2 cursor-pointer hover:scale-102 w-full sm:w-1/2 text-white ${loading?"cursor-not-allowed bg-blue-600 text-white":"bg-blue-600 text-sm "}`}
 > 
 {
   loading?(

@@ -15,7 +15,7 @@ const RA_Agent = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedFile, setSelectedFile] = useState(null)
   const [showResumeTab, setShowResumeTab] = useState(true)
-  const [resumeFileName, setResumeFileName] = useState("Resume.pdf")
+  const [resumeFileName, setResumeFileName] = useState("")
 
   const messagesEndRef = useRef(null)
   const fileInputRef = useRef(null)
@@ -31,10 +31,14 @@ const hasStarted = message.length > 0
   }, [message, streamResponse, isLoading])
 
   useEffect(() => {
-    if (!userId || !resumeIdToken) {
-      toast.error("Register and upload a resume before trying it")
+    if (!userId) {
+      toast.error("Create an account or log in before opening the chat.")
+      navigate("/signup", { replace: true })
+    } else if (!resumeIdToken) {
+      toast.error("Upload a resume before opening the chat.")
+      navigate("/upload-resume", { replace: true })
     }
-  }, [userId, resumeIdToken])
+  }, [userId, resumeIdToken, navigate])
 
   useEffect(() => {
     const storedFileName = sessionStorage.getItem("resumeFileName")
@@ -229,7 +233,7 @@ console.log(JSON.stringify(fullChunk))
 )
 
   return (
-    <div className="flex flex-col h-screen bg-[radial-gradient(ellipse_at_top_left,_#1a0533_0%,_#0d0d0d_60%)] text-black">
+    <div className="flex h-[calc(100dvh-1.5rem)] min-h-0 flex-col overflow-hidden bg-slate-950 text-white sm:h-[calc(100dvh-2rem)] lg:h-[calc(100dvh-2.5rem)]">
 
       <NavBar 
         showResume={showResumeTab}
@@ -238,19 +242,19 @@ console.log(JSON.stringify(fullChunk))
       />
 
       {/* Chat Body */}
-      <div className="flex-1 overflow-y-auto flex flex-col">
+      <div className="flex-1 min-h-0 overflow-y-auto flex flex-col">
 
-  <div className="w-full max-w-4xl mx-auto flex-1 flex flex-col space-y-6 px-4 py-8">
+  <div className="w-full max-w-4xl mx-auto flex-1 flex flex-col space-y-6 px-2 py-5 sm:px-4 sm:py-8">
 
     {/* 👇 INITIAL SCREEN */}
     
 
       {!hasStarted && !isLoading && (
-  <div className="flex flex-col items-center justify-center h-full text-center">
+  <div className="flex min-h-full flex-col items-center justify-center text-center py-4">
 
     <Sparkles size={40} className="text-blue-500 mb-4" />
 
-    <h1 className="text-4xl font-bold text-blue-700 ">Resume Agent</h1>
+    <h1 className="text-3xl sm:text-4xl font-bold text-blue-400">Resume Agent</h1>
     <p className="text-gray-500 mt-2">
       AI-powered resume assistant
     </p>
@@ -263,7 +267,7 @@ console.log(JSON.stringify(fullChunk))
         onKeyDown={enterKeyDown}
         onChange={(e) => setInputMessage(e.target.value)}
         placeholder="Ask anything about your resume..."
-        className="w-full py-3 pl-5 pr-14 border rounded-full text-white bg-gray-800"
+        className="w-full py-3 pl-4 sm:pl-5 pr-14 border rounded-full text-white bg-gray-800"
       />
 
       <button
@@ -276,7 +280,7 @@ console.log(JSON.stringify(fullChunk))
     </div>
 
     {/* SUGGESTIONS */}
-    <div className="grid grid-cols-3 gap-4 mt-6 w-full max-w-xl">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6 w-full max-w-xl">
 
       {[
         "Review my resume",
@@ -290,7 +294,7 @@ console.log(JSON.stringify(fullChunk))
         <div
           key={i}
           onClick={() => setInputMessage(item)}
-          className=" cursor-pointer max-w-fit p-3 bg-blue-600 text-white shadow-sm shadow-black/30 rounded-xl hover:shadow-md"
+          className="cursor-pointer min-w-0 p-3 bg-blue-600 text-white shadow-sm shadow-black/30 rounded-xl hover:shadow-md text-sm sm:text-base"
         >
           {item}
         </div>
@@ -316,8 +320,8 @@ console.log(JSON.stringify(fullChunk))
         <div
           className={`${
             msg.role === "user"
-              ? "bg-blue-500 text-white rounded-3xl px-6 py-3 max-w-2xl"
-              : " border rounded-xl px-6 py-4 text-white max-w-2xl shadow-sm"
+              ? "bg-blue-500 text-white rounded-3xl px-4 sm:px-6 py-3 max-w-[90%] sm:max-w-2xl break-words"
+              : "min-w-0 max-w-[90%] sm:max-w-2xl border rounded-xl px-4 sm:px-6 py-4 text-white shadow-sm break-words"
           }`}
         >
 
@@ -336,7 +340,7 @@ console.log(JSON.stringify(fullChunk))
     {streamResponse && (
       <div className="flex items-start gap-3">
         <Sparkles size={20} className="text-blue-500 mt-1" />
-        <div className=" border rounded-xl px-6 py-4 max-w-2xl  text-white shadow-sm">
+        <div className="min-w-0 max-w-[90%] sm:max-w-2xl border rounded-xl px-4 sm:px-6 py-4 text-white shadow-sm break-words">
          <MarkdownRenderer content={streamResponse} />
         </div>
       </div>
@@ -358,13 +362,13 @@ console.log(JSON.stringify(fullChunk))
 </div>
 
     {/* 👇 INPUT SECTION */}
-    <div className="w-full max-w-4xl mx-auto px-4 pb-6">
+    <div className="w-full max-w-4xl mx-auto px-2 sm:px-4 pb-2 sm:pb-6">
       {/* FILE DISPLAY */}
       {selectedFile && (
         <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
           <div className="flex items-center gap-2">
             <Upload size={18} className="text-blue-600" />
-            <span className="text-sm font-medium text-blue-900">{selectedFile.name}</span>
+            <span className="min-w-0 truncate text-sm font-medium text-blue-900">{selectedFile.name}</span>
           </div>
           <button
             onClick={handleRemoveFile}
@@ -377,7 +381,7 @@ console.log(JSON.stringify(fullChunk))
 
  
 {
-  hasStarted&&(<div className="  p-6 flex-shrink-0">
+  hasStarted&&(<div className="px-2 py-3 sm:p-6 flex-shrink-0">
 
         <div className="max-w-4xl mx-auto">
 
@@ -390,7 +394,7 @@ console.log(JSON.stringify(fullChunk))
               disabled={isLoading}
               type="text"
               placeholder="Ask me any question about your resume..."
-              className="w-full py-3 pl-5 pr-14 outline-none border bg-gray-800 border-gray-300 rounded-full placeholder:text-gray-400  focus:bg-gray-700 text-white focus:border-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 pl-4 sm:pl-5 pr-14 outline-none border bg-gray-800 border-gray-300 rounded-full placeholder:text-gray-400 focus:bg-gray-700 text-white focus:border-white transition disabled:opacity-50 disabled:cursor-not-allowed"
             />
 
             <button
