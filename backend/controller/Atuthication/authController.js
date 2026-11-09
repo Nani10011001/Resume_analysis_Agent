@@ -15,49 +15,53 @@ export const signUp =async(req,res)=>{
                 message:"all fields are required"
             })
         }
-const userAleardyExit=await User.findOne({email})
 
+const userAlreadyExists = await User.findOne({ email });
 
-       
-        if(userAleardyExit){
-            return res.status(400).json({
-                success:false,
-         message:"user alreadyexist "
-            })
-        } 
-        const hashPassword=await bcrypt.hash(password,10)
-   
+if (userAlreadyExists) {
+    return res.status(400).json({
+        success: false,
+        message: "User already exists"
+    });
+}
 
-    await SentEmail(email) 
-        
-        const user=await User.create({
-            username:username,
-            email:email,
-            password:hashPassword,
-           
+const hashPassword = await bcrypt.hash(password, 10);
 
+// 1. Create user first
+const user = await User.create({
+    username,
+    email,
+    password: hashPassword
+});
 
-        })
-        
-    const jwtToken= jwt.sign({userId:user._id},env.JWT_SECRETE,{expiresIn:"7d"})
-            
-        res.cookie("token",jwtToken,{
-            httpOnly:true,
-            secure: env.NODE_ENV === "production",
-            sameSite: env.NODE_ENV === "production" ? "None" : "lax",
-            maxAge:7*24*60*60*1000
+// 2. Generate JWT
+const jwtToken = jwt.sign(
+    { userId: user._id },
+    env.JWT_SECRETE,
+    { expiresIn: "7d" }
+);
+
+// 3. Set authentication cookie
+res.cookie("token", jwtToken, {
+    httpOnly: true,
+    secure: env.NODE_ENV === "production",
+    sameSite: env.NODE_ENV === "production" ? "None" : "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000
+});
+
+// 4. Trigger email without awaiting it
+SentEmail(email).catch((error) => {
+    console.error("Welcome email failed:", error.message);
+});
+
+// 5. Return response immediately
+return res.status(201).json({
+    success: true,
+    message: "Signup successfully",
+    userDetail: user
+});
+
       
-        })
-    
-return res.status(200).json({
-    success:true,
-    message:"signup successfully",
-    userDetail:user,
-    jwt:jwtToken
-   
-    
-})
-        
     } catch (error) {
         console.log(error)
         return res.status(500).json({
