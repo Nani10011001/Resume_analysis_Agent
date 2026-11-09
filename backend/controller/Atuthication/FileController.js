@@ -35,10 +35,15 @@ export const FileController = async (userId, file) => {
 
     console.log("Calling FastAPI:", targetUrl);
 
-const response = await axios.post(targetUrl, formData, {
-    headers: formData.getHeaders(),
-    timeout: 120000,
-});
+const response = await axios.post(targetUrl, formData, 
+  
+    {
+      headers: formData.getHeaders(),
+      timeout: 120000,
+      maxBodyLength: Infinity,
+      maxContentLength: Infinity,
+    }
+);
 
 console.log("FastAPI status:", response.status);
 console.log("FastAPI response:", response.data);
@@ -52,6 +57,6 @@ console.log("FastAPI response:", response.data);
         : error.response?.data,
     code: error.code
 });
-    throw new Error(`File upload failed: ${error.message}`);
+   throw new Error("Resume processing service is temporarily unavailable");
   }
 };
