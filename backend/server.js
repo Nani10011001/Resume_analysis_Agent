@@ -49,6 +49,29 @@ const addresses = await dns.lookup(
 );
 
 console.log("Gmail IPv4 addresses:", addresses);
+import net from "node:net";
+
+const socket = net.createConnection({
+    host: "142.251.10.109",
+    port: 587,
+    family: 4
+});
+
+socket.setTimeout(10000);
+
+socket.on("connect", () => {
+    console.log("SMTP TCP CONNECTED");
+    socket.destroy();
+});
+
+socket.on("timeout", () => {
+    console.log("SMTP TCP TIMEOUT");
+    socket.destroy();
+});
+
+socket.on("error", (err) => {
+    console.log("SMTP TCP ERROR:", err.code);
+});
 const serverStart=async()=>{
 
     try {
