@@ -2,20 +2,29 @@
 import nodemailer from "nodemailer"
 import { env } from "../config/ZodValidation.js"
 
-const ClientMailConfig=nodemailer.createTransport(
-    {
-        service:"gmail",
-        auth:{
+const ClientMailConfig = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
 
-            user:env.EMAIL_USER,
-            pass:env.PASS_KEY
-        },
-        
-        tls:{
-          rejectUnauthorized: false
-        }
+    auth: {
+        user: env.EMAIL_USER,
+        pass: env.PASS_KEY
+    },
+
+    family: 4,
+
+    tls: {
+        minVersion: "TLSv1.2"
+    }
+});
+ClientMailConfig.verify()
+    .then(() => {
+        console.log("Gmail SMTP connected successfully");
     })
-
+    .catch((error) => {
+        console.error("Gmail SMTP connection failed:", error);
+    });
    export  const SentEmail=async(toEmail)=>
         {
         const html = `<div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 600px; margin: auto;">
