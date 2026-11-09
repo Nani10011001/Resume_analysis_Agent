@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs"
 import { env } from "../../config/ZodValidation.js"
 
-import { SentEmail } from "../../utils/emailService.js"
+
 
 export const signUp =async(req,res)=>{
     try {
@@ -50,9 +50,6 @@ res.cookie("token", jwtToken, {
 });
 
 
-SentEmail(email).catch((error) => {
-    console.error("Welcome email failed:", error.message);
-});
 
 
 return res.status(201).json({

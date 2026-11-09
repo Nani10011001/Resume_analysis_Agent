@@ -1,4 +1,4 @@
-
+/* 
 import nodemailer from "nodemailer"
 import { env } from "../config/ZodValidation.js"
 
@@ -86,4 +86,4 @@ ClientMailConfig.verify()
         subject:"ResumeAgent web configuration verification",
         html
     })
-    }
+    } */
