@@ -41,7 +41,7 @@ const jwtToken = jwt.sign(
     { expiresIn: "7d" }
 );
 
-// 3. Set authentication cookie
+
 res.cookie("token", jwtToken, {
     httpOnly: true,
     secure: env.NODE_ENV === "production",
@@ -49,12 +49,12 @@ res.cookie("token", jwtToken, {
     maxAge: 7 * 24 * 60 * 60 * 1000
 });
 
-// 4. Trigger email without awaiting it
+
 SentEmail(email).catch((error) => {
     console.error("Welcome email failed:", error.message);
 });
 
-// 5. Return response immediately
+
 return res.status(201).json({
     success: true,
     message: "Signup successfully",

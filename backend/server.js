@@ -40,6 +40,15 @@ app.get("/",(req,res)=>{
 })
 app.use("/api",router)
 app.use("/api/agent",AgentRouter)
+
+import dns from "node:dns/promises";
+
+const addresses = await dns.lookup(
+    "smtp.gmail.com",
+    { all: true, family: 4 }
+);
+
+console.log("Gmail IPv4 addresses:", addresses);
 const serverStart=async()=>{
 
     try {
