@@ -57,11 +57,7 @@ async def web_search(query: str) -> str:
 
 if __name__ == "__main__":
     logger.info("Starting MCP server...")
-    mcp.run(
-    transport="streamable-http",       
-    host="0.0.0.0",
-    port=int(os.environ.get("PORT",7001))
-    )
+ 
 async def health_check():
     async with Client("https://resume-analysis-agent-5.onrender.com/mcp") as client:
         await client.ping()
