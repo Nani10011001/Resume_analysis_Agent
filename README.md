@@ -3,20 +3,25 @@
 An AI-powered resume analysis and career assistant that analyzes resumes using NLP, structured scoring, semantic retrieval, and LLM-based reasoning. The system can review resumes, provide career guidance, generate cover letters, identify skill gaps, prepare interview questions, assist with salary negotiation, and search for relevant job opportunities.
 
 ## 🚀 Live Demo
-### ⚠️ Before accessing the live application
+ Before accessing the live application
 
-This project is deployed using free-tier hosting on Render. The backend services may become inactive after a period of inactivity.
+This project is deployed using Render's free-tier hosting. Backend services may become inactive after a period of inactivity.
 
-**Before testing the live application:**
-1. Open the Express backend health endpoint to activate the service.
-2. Open the FastAPI health endpoint to activate the AI service.
-3. Allow the services time to start and respond.
-4. Once both services are active, open the frontend application and test the Resume Analysis Agent.
+Before testing the live application:
 
-Please allow some extra time for the initial startup due to Render free-tier cold starts.
+Open the [Express Backend Health Check](https://resume-analysis-agent-4.onrender.com/health).
 
+Open the [FastAPI AI Service Health Check](https://resume-analysis-agent-6.onrender.com/health).
+
+The MCP connection and tool availability are checked automatically by the agent when the job-search workflow executes.
+
+Allow the services some time to start.
+
+Once the services are active, open the Resume Analysis Agent Frontend.
+
+Please allow extra time for the initial startup due to Render free-tier cold starts.
 Thank you for exploring my project!
-[Resume Analysis Agent](https://resume-analysis-agent-psi.vercel.app)
+[Resume Analysis Agent](https://resume-analysis-agent-alpha.vercel.app)
 
 ---
 
