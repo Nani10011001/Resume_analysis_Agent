@@ -173,39 +173,8 @@ The AI system is implemented using LangGraph.
 
 Every request begins with an intent classification step.
 
-```text
-                    User Request
-                         │
-                         ▼
-              ┌───────────────────┐
-              │ Intent Classifier  │
-              └─────────┬─────────┘
-                        │
-          ┌─────────────┼────────────────┐
-          │             │                │
-          ▼             ▼                ▼
-      Greeting       Retrieval       General Chat
-                        │
-                        ▼
-                Route by Intent
-                        │
-       ┌────────────────┼─────────────────┐
-       │        │       │       │          │
-       ▼        ▼       ▼       ▼          ▼
-    Resume   Career   Cover   Interview   Skill
-    Review   Advice   Letter    Prep       Gap
-                │
-                ▼
-         Salary Negotiation
+`<img width="6919" height="5320" alt="resume-agents-arch" src="https://github.com/user-attachments/assets/bd0459de-71d6-4ad7-8591-08b84bbdae8c" />
 
-                 Job Search
-                     │
-                     ▼
-                MCP Tool
-                     │
-                     ▼
-                   Exa
-```
 
 ### Current specialist agents
 
@@ -230,19 +199,9 @@ The system uses resume-specific retrieval before specialist reasoning.
 
 The retrieval process can use:
 
-```text
-User Query
-    ↓
-Query Embedding
-    ↓
-MongoDB Vector Search
-    ↓
-Resume-specific chunks
-    ↓
-Retrieved Context
-    ↓
-Specialist Agent
-```
+
+<img width="3870" height="7360" alt="Resume Career Routing Pipeline-2026-11-04-130031" src="https://github.com/user-attachments/assets/7f487103-f829-4d71-b908-51ce8943c7ce" />
+
 
 Vector search is filtered using the user's ID and resume ID so that retrieved context belongs to the correct resume.
 
@@ -719,13 +678,14 @@ This allows the frontend, backend, AI service, and MCP service to be containeriz
 # 🚀 Deployment Architecture
 
 The application is designed as independently deployable services.
+ frontend is deployed in vercel and backend services like express and mcp and fastapi serveices deployed in render.
 
 ```text
                      Internet
                         │
                         ▼
                ┌─────────────────┐
-               │    Vercel       │
+               │                 │
                │    Frontend     │
                └────────┬────────┘
                         │
@@ -739,11 +699,8 @@ The application is designed as independently deployable services.
                ┌─────────────────┐
                │   FastAPI AI    │
                │    Service      │
-               └───────┬─────────┘
-                       │
-             ┌─────────┼──────────┐
-             ▼         ▼          ▼
-          MongoDB    Redis      MCP/Exa
+               └───────--────────┘
+             
 ```
 
 ---
