@@ -6,8 +6,7 @@ from langsmith import traceable
 from exa_py import Exa
 import threading
 load_dotenv(os.path.join(os.path.dirname(__file__), "./.env"))
-import asyncio
-from fastmcp import Client
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("websearch-mcp")
 
@@ -55,22 +54,10 @@ async def web_search(query: str) -> str:
         logger.error(f"Search failed: {e}")
         return f"Search error: {str(e)}"
 
-
- 
-async def health_check():
-    try:
-        async with Client(
-            "https://resume-analysis-agent-5.onrender.com/mcp"
-        ) as client:
-            tools = await client.list_tools()
-            print("MCP server is healthy")
-            print("Available tools:", [tool.name for tool in tools])
-
-    except Exception as e:
-        print("MCP health check failed:", str(e))
-        raise
-
 if __name__ == "__main__":
-    
     logger.info("Starting MCP server...")
-    asyncio.run(health_check())
+    mcp.run(
+    transport="streamable-http",       
+    host="0.0.0.0",
+    port=int(os.environ.get("PORT",7001))
+    )
