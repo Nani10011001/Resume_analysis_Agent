@@ -7,7 +7,7 @@ from exa_py import Exa
 import threading
 load_dotenv(os.path.join(os.path.dirname(__file__), "./.env"))
 import asyncio
-from fastapi import Client
+from fastmcp import Client
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("websearch-mcp")
 
