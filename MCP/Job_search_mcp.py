@@ -55,12 +55,22 @@ async def web_search(query: str) -> str:
         logger.error(f"Search failed: {e}")
         return f"Search error: {str(e)}"
 
-if __name__ == "__main__":
-    logger.info("Starting MCP server...")
+
  
 async def health_check():
-    async with Client("https://resume-analysis-agent-5.onrender.com/mcp") as client:
-        await client.ping()
-        print("MCP server is healthy")
+    try:
+        async with Client(
+            "https://resume-analysis-agent-5.onrender.com/mcp"
+        ) as client:
+            tools = await client.list_tools()
+            print("MCP server is healthy")
+            print("Available tools:", [tool.name for tool in tools])
 
-asyncio.run(health_check())
+    except Exception as e:
+        print("MCP health check failed:", str(e))
+        raise
+
+if __name__ == "__main__":
+    
+    logger.info("Starting MCP server...")
+    asyncio.run(health_check())
