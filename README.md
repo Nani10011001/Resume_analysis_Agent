@@ -13,6 +13,8 @@ Open the [Express Backend Health Check](https://resume-analysis-agent-4.onrender
 
 Open the [FastAPI AI Service Health Check](https://resume-analysis-agent-6.onrender.com/health).
 
+Open the [mcp  service check](https://resume-analysis-agent-5.onrender.com)
+
 The MCP connection and tool availability are checked automatically by the agent when the job-search workflow executes.
 
 Allow the services some time to start.
