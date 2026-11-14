@@ -1,3 +1,4 @@
+import re
 from Graphs.state import Agent_state
 from Config.llmConfig import get_llm
 from langchain_core.messages import AIMessage
@@ -47,6 +48,19 @@ INTENT_TO_SPECIALIST = {
 }
 llm=get_llm()
 
+def is_job_search_request(user_message: str) -> bool:
+    words = set(re.findall(r"[a-z]+", user_message.lower()))
+    job_terms = {
+        "job", "jobs", "opening", "openings", "position", "positions",
+        "role", "roles", "vacancy", "vacancies",
+    }
+    search_terms = {
+        "link", "links", "listing", "listings", "search", "find",
+        "recommend", "recommendation", "recommendations",
+        "opportunity", "opportunities",
+    }
+    return bool(words & job_terms and words & search_terms)
+
 @traceable(name="classifyIntenrprompt")
 def classifyIntentPrompt(user_message: str) -> str:
     intent_definitions = "\n".join(
@@ -59,6 +73,11 @@ You are an intent classifier for a resume analysis AI system called ResumeAgent.
 Return ONLY one intent label from the list below.
 No explanation. No punctuation. Just the label.
 
+Choose job_search when the user asks for job links, listings, openings,
+opportunities, or recommendations, even if they mention their resume.
+Choose resume_review or resume_analysis only when they ask for feedback or
+analysis of the resume itself, not for jobs to apply to.
+
 Intents:
 {intent_definitions}
 
@@ -70,6 +89,10 @@ Intent:
 @traceable(name="intent_classify_node")
 def intent_classifier_node(state: Agent_state) -> dict:
     user_message = state["messages"][-1].content
+
+    if is_job_search_request(user_message):
+        logger.info("intent: job_search (explicit job-search request)")
+        return {"intent": "job_search"}
 
     response = llm.invoke(classifyIntentPrompt(user_message))
 
