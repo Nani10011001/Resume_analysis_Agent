@@ -1,3 +1,7 @@
+
+
+https://github.com/user-attachments/assets/9b84d340-1d06-4d53-9010-0699a8431996
+
 # Resume Analysis Agent
 
 An AI-powered resume analysis and career assistant that analyzes resumes using NLP, structured scoring, semantic retrieval, and LLM-based reasoning. The system can review resumes, provide career guidance, generate cover letters, identify skill gaps, prepare interview questions, assist with salary negotiation, and search for relevant job opportunities.
@@ -32,8 +36,7 @@ Thank you for exploring my project!
 
 
 
-
-
+https://github.com/user-attachments/assets/0d36766a-093c-4d96-b5d0-09394dd59a62
 
 
 
