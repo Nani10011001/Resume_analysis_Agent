@@ -25,14 +25,14 @@ INTENT_TO_NODE = {
     "greeting":             "greeting_node",
     "thanking":             "thanks_node",
     "general_chat":         "general_chat_node",
-    "resume_review":        "signal_node",
+    "resume_review":        "retrieval_node",
     "career_advice":        "retrieval_node",
     "cover_letter":         "retrieval_node",
     "job_search":           "retrieval_node",
     "interview_prep":       "retrieval_node",
     "salary_negotiation":   "retrieval_node",
     "skill_gap":            "retrieval_node",
-    "resume_analysis":      "signal_node",
+    "resume_analysis":      "retrieval_node",
 }
 
 INTENT_TO_SPECIALIST = {
@@ -90,7 +90,7 @@ def route_by_intent(state: Agent_state) -> str:
 def route_after_retrieval(state):
     intent = state.get("intent", "")
 
-    if intent == "resume_analysis":
+    if intent in {"resume_analysis", "resume_review"}:
         return "signal_node"
 
     elif intent == "career_advice":
