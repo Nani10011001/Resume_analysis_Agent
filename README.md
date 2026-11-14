@@ -27,6 +27,25 @@ Thank you for exploring my project!
 
 ---
 
+
+
+
+
+
+
+
+
+
+🎬 Project Demonstration
+Embed your 1-2 minute silent demonstration video here.
+
+Video sequence:
+1. Login and application interface.
+2. Upload resume (PDF).
+3. Ask questions to the Resume Agent.
+4. Show the agent's responses.
+5. Open LangSmith and show execution traces for each question.
+6. Briefly show the architecture diagram.
 ## 📌 Problem
 
 Most resume tools focus primarily on keyword matching or simple ATS checks. They often provide a score without explaining **why** a resume receives that score or how the candidate can improve it.
