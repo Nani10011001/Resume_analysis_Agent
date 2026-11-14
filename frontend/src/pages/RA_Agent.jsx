@@ -129,7 +129,7 @@ const hasStarted = message.length > 0
         role: "ai",
         text: fullChunk
       }
-console.log(JSON.stringify(fullChunk))
+
       setMessage((prev) => [...prev, aiMessage])
 
       setStreamResponse("")
